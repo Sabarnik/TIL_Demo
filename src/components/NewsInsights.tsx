@@ -2,6 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 
 const NewsInsights: React.FC = () => {
@@ -264,13 +265,12 @@ const news = [
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
         >
-          <motion.a
-            href={`${basePath}/media/news`}
-            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-[#F1B434] to-[#FFE352] text-white rounded-lg font-semibold shadow-md hover:shadow-lg transition-all"
-            whileHover={{ scale: 1.05 }}
-          >
-            View All News Articles
-          </motion.a>
+          <Link
+      href={`${basePath}/media/news`}
+      className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-[#F1B434] to-[#FFE352] text-white rounded-lg font-semibold shadow-md hover:shadow-lg transition-all"
+    >
+      View All News Articles
+    </Link>
         </motion.div>
       </div>
     </section>

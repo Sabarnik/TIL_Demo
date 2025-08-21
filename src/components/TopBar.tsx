@@ -4,6 +4,7 @@ import { Search } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useSearch } from '../context/SearchContext';
 import GetQuoteModal from '../components/GetQuote';
+import Link from 'next/link';
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 
@@ -26,25 +27,20 @@ const TopBar: React.FC = () => {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-[#f1b434] h-14' : 'bg-[#f1b434] h-16'
-      } border-b border-black/20`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-[#f1b434] h-14' : 'bg-[#f1b434] h-16'
+        } border-b border-black/20`}
     >
       <div className="max-w-7xl mx-auto px-6 md:px-10 xl:px-20 h-full">
         <div className="flex items-center justify-between h-full">
-          {/* TIL India Logo */}
-          <motion.a
-            href="/"
-            className="flex items-center"
-            whileHover={{ scale: 1.02 }}
-            transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-          >
-            <img
+          <Link href={basePath || "/"} className="flex items-center">
+            <motion.img
               src={`${basePath}/logo1.png`}
               alt="Logo"
               className="h-15 w-auto"
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
             />
-          </motion.a>
+          </Link>
 
           {/* Right Actions */}
           <div className="flex items-center space-x-4">
@@ -52,6 +48,7 @@ const TopBar: React.FC = () => {
             <div className="hidden md:flex items-center space-x-2">
               {/* LinkedIn */}
               <button
+                onClick={() => window.open('https://www.linkedin.com/company/til-limited-ind/', '_blank', 'noopener,noreferrer')}
                 aria-label="LinkedIn"
                 className="p-2 text-black hover:text-[#0077b5] transition-colors"
               >
@@ -67,7 +64,9 @@ const TopBar: React.FC = () => {
               </button>
               {/* Facebook */}
               <button
+                onClick={() => window.open('https://www.facebook.com/tillimited/', '_blank', 'noopener,noreferrer')}
                 aria-label="Facebook"
+
                 className="p-2 text-black hover:text-[#3b5998] transition-colors"
               >
                 <svg
@@ -82,6 +81,7 @@ const TopBar: React.FC = () => {
               </button>
               {/* YouTube */}
               <button
+                onClick={() => window.open('https://www.youtube.com/tillimitedindia', '_blank', 'noopener,noreferrer')}
                 aria-label="YouTube"
                 className="p-2 text-black hover:text-[#ff0000] transition-colors"
               >

@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
@@ -154,7 +154,104 @@ const subProducts = {
   // Add other categories with their sub-products similarly
 };
 
-export default function ProductPage({ params }: { params: { product: string } }) {
+// Skeleton Loader Component
+function ProductSkeleton() {
+  return (
+    <div className="bg-gradient-to-b from-[#f8f9fa] to-white min-h-screen font-sans">
+      {/* Hero Section Skeleton */}
+      <div className="relative bg-gray-300 h-72 w-full overflow-hidden animate-pulse">
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-400 via-gray-300 to-transparent z-10" />
+        <div className="absolute inset-0 z-20 flex items-center pt-6">
+          <div className="max-w-7xl mx-auto px-6 md:px-10 xl:px-20 w-full">
+            <div className="max-w-2xl">
+              <div className="h-4 bg-gray-400 rounded w-1/4 mb-4"></div>
+              <div className="h-10 bg-gray-400 rounded w-3/4 mb-4"></div>
+              <div className="w-24 h-1.5 bg-gray-400 rounded-full mb-4"></div>
+              <div className="h-6 bg-gray-400 rounded w-full mb-2"></div>
+              <div className="h-6 bg-gray-400 rounded w-2/3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <main className="max-w-7xl mx-auto px-6 md:px-10 xl:px-20 py-16 -mt-6 relative z-10">
+        <div className="mb-8">
+          <div className="h-5 bg-gray-300 rounded w-32"></div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+          {/* Product Image Skeleton */}
+          <div className="rounded-xl overflow-hidden shadow-lg bg-gray-300 h-96 animate-pulse"></div>
+
+          {/* Product Details Skeleton */}
+          <div>
+            <div className="mb-8">
+              <div className="h-6 bg-gray-300 rounded w-1/3 mb-4"></div>
+              <ul className="space-y-3">
+                {[1, 2, 3].map((item) => (
+                  <li key={item} className="flex items-start">
+                    <div className="flex-shrink-0 h-5 w-5 bg-gray-300 rounded-full mr-3"></div>
+                    <div className="h-5 bg-gray-300 rounded w-full"></div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="mb-8">
+              <div className="h-6 bg-gray-300 rounded w-1/3 mb-4"></div>
+              <div className="bg-gray-100 rounded-lg p-6">
+                <ul className="space-y-3">
+                  {[1, 2, 3].map((item) => (
+                    <li key={item} className="flex justify-between border-b border-gray-200 pb-2">
+                      <div className="h-5 bg-gray-300 rounded w-1/3"></div>
+                      <div className="h-5 bg-gray-300 rounded w-1/4"></div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-4">
+              <div className="h-10 bg-gray-300 rounded w-40"></div>
+              <div className="h-10 bg-gray-300 rounded w-32"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Sub-Products Section Skeleton */}
+        <div className="mb-16">
+          <div className="h-7 bg-gray-300 rounded w-1/4 mb-6"></div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3].map((item) => (
+              <div key={item} className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
+                <div className="bg-gray-300 h-48 animate-pulse"></div>
+                <div className="p-6">
+                  <div className="h-6 bg-gray-300 rounded w-3/4 mb-2"></div>
+                  <div className="h-4 bg-gray-300 rounded w-1/3"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Contact CTA Skeleton */}
+        <div className="bg-white rounded-xl shadow-md p-8 border border-gray-100">
+          <div className="max-w-2xl mx-auto text-center">
+            <div className="h-7 bg-gray-300 rounded w-3/4 mx-auto mb-3"></div>
+            <div className="h-5 bg-gray-300 rounded w-full mb-4"></div>
+            <div className="h-5 bg-gray-300 rounded w-2/3 mx-auto mb-6"></div>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <div className="h-10 bg-gray-300 rounded w-40"></div>
+              <div className="h-10 bg-gray-300 rounded w-32"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+function ProductContent({ params }: { params: { product: string } }) {
   const product = allProducts.find(p => p.id === params.product);
   
   if (!product) {
@@ -360,5 +457,13 @@ export default function ProductPage({ params }: { params: { product: string } })
         </motion.div>
       </main>
     </div>
+  );
+}
+
+export default function ProductPage({ params }: { params: { product: string } }) {
+  return (
+    <Suspense fallback={<ProductSkeleton />}>
+      <ProductContent params={params} />
+    </Suspense>
   );
 }

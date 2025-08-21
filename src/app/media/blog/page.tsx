@@ -144,8 +144,10 @@ const Page: React.FC = () => {
   };
 
   const handlePostClick = (postTitle: string) => {
-    navigate.push(`/media/blog/${postTitle.replace(/\s+/g, '-').toLowerCase()}`);
+    const slug = postTitle.replace(/\s+/g, "-").toLowerCase();
+    navigate.push(`${basePath}/media/blog/${slug}`);
   };
+
 
   const handleTagClick = (tag: string) => {
     setActiveTags(prev =>
@@ -201,61 +203,61 @@ const Page: React.FC = () => {
     <div className="bg-gradient-to-b from-[#f8f9fa] to-white min-h-screen">
       {/* Updated Header with Left-Aligned Heading */}
       <div className="relative h-72 w-full overflow-hidden">
-  <img
-    src={`${basePath}/blogpage-bg.jpg`}
-    alt="Investor Relations"
-    className="w-full h-full object-cover"
-  />
-
-  {/* Darker Gradient Overlay */}
-  <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10" />
-
-  {/* Content Container */}
-  <div className="absolute inset-0 z-20 flex items-center pt-6">
-    <div className="max-w-7xl mx-auto px-6 md:px-10 xl:px-20 w-full">
-      <motion.div 
-        className="max-w-2xl"
-        initial={{ opacity: 0, x: -30 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8, ease: [0.16, 0.77, 0.47, 0.97] }}
-      >
-        <motion.span
-          className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#F1B434] to-[#FFE352] text-sm font-bold tracking-tight mb-2 mt-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.8 }}
-        >
-          INDUSTRY INSIGHTS
-        </motion.span>
-        
-        <motion.h1
-          className="text-4xl md:text-5xl lg:text-[2.75rem] font-bold text-white mb-4 leading-tight"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.8 }}
-        >
-          TIL <span className="text-[#F1B434]">Blog</span>
-        </motion.h1>
-        
-        <motion.div
-          className="w-24 h-1.5 bg-gradient-to-r from-[#F1B434] to-[#FFE352] rounded-full mb-4"
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ delay: 0.4, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        <img
+          src={`${basePath}/blogpage-bg.jpg`}
+          alt="Investor Relations"
+          className="w-full h-full object-cover"
         />
-        
-        <motion.p
-          className="text-lg text-gray-200 max-w-xl leading-relaxed"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5, duration: 0.8 }}
-        >
-          Stay updated with the latest trends, innovations, and news in the heavy equipment industry.
-        </motion.p>
-      </motion.div>
-    </div>
-  </div>
-</div>
+
+        {/* Darker Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10" />
+
+        {/* Content Container */}
+        <div className="absolute inset-0 z-20 flex items-center pt-6">
+          <div className="max-w-7xl mx-auto px-6 md:px-10 xl:px-20 w-full">
+            <motion.div
+              className="max-w-2xl"
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, ease: [0.16, 0.77, 0.47, 0.97] }}
+            >
+              <motion.span
+                className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#F1B434] to-[#FFE352] text-sm font-bold tracking-tight mb-2 mt-8"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.8 }}
+              >
+                INDUSTRY INSIGHTS
+              </motion.span>
+
+              <motion.h1
+                className="text-4xl md:text-5xl lg:text-[2.75rem] font-bold text-white mb-4 leading-tight"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.8 }}
+              >
+                TIL <span className="text-[#F1B434]">Blog</span>
+              </motion.h1>
+
+              <motion.div
+                className="w-24 h-1.5 bg-gradient-to-r from-[#F1B434] to-[#FFE352] rounded-full mb-4"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ delay: 0.4, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              />
+
+              <motion.p
+                className="text-lg text-gray-200 max-w-xl leading-relaxed"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5, duration: 0.8 }}
+              >
+                Stay updated with the latest trends, innovations, and news in the heavy equipment industry.
+              </motion.p>
+            </motion.div>
+          </div>
+        </div>
+      </div>
 
 
       <main className="max-w-7xl mx-auto px-6 md:px-10 xl:px-20 py-16 -mt-6 relative z-10">
@@ -472,22 +474,20 @@ const Page: React.FC = () => {
                     <button
                       onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                       disabled={currentPage === 1}
-                      className={`relative inline-flex items-center rounded-md px-4 py-2 text-sm font-medium ${
-                        currentPage === 1
+                      className={`relative inline-flex items-center rounded-md px-4 py-2 text-sm font-medium ${currentPage === 1
                           ? 'text-gray-400 cursor-not-allowed bg-gray-100'
                           : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                        }`}
                     >
                       Previous
                     </button>
                     <button
                       onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                       disabled={currentPage === totalPages}
-                      className={`relative ml-3 inline-flex items-center rounded-md px-4 py-2 text-sm font-medium ${
-                        currentPage === totalPages
+                      className={`relative ml-3 inline-flex items-center rounded-md px-4 py-2 text-sm font-medium ${currentPage === totalPages
                           ? 'text-gray-400 cursor-not-allowed bg-gray-100'
                           : 'text-gray-700 hover:bg-gray-50'
-                      }`}
+                        }`}
                     >
                       Next
                     </button>
@@ -502,9 +502,8 @@ const Page: React.FC = () => {
                       <button
                         onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                         disabled={currentPage === 1}
-                        className={`relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${
-                          currentPage === 1 ? 'cursor-not-allowed opacity-50' : ''
-                        }`}
+                        className={`relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${currentPage === 1 ? 'cursor-not-allowed opacity-50' : ''
+                          }`}
                       >
                         <span className="sr-only">Previous</span>
                         <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -515,11 +514,10 @@ const Page: React.FC = () => {
                         <button
                           key={page}
                           onClick={() => setCurrentPage(page)}
-                          className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ${
-                            currentPage === page
+                          className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ${currentPage === page
                               ? 'bg-[#F1B434] text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F1B434]'
                               : 'text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0'
-                          }`}
+                            }`}
                         >
                           {page}
                         </button>
@@ -527,9 +525,8 @@ const Page: React.FC = () => {
                       <button
                         onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                         disabled={currentPage === totalPages}
-                        className={`relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${
-                          currentPage === totalPages ? 'cursor-not-allowed opacity-50' : ''
-                        }`}
+                        className={`relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${currentPage === totalPages ? 'cursor-not-allowed opacity-50' : ''
+                          }`}
                       >
                         <span className="sr-only">Next</span>
                         <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -633,11 +630,10 @@ const Page: React.FC = () => {
                   <button
                     key={topic}
                     onClick={() => handleTagClick(topic)}
-                    className={`text-sm px-3 py-1.5 rounded-full transition-colors ${
-                      activeTags.includes(topic)
+                    className={`text-sm px-3 py-1.5 rounded-full transition-colors ${activeTags.includes(topic)
                         ? 'bg-[#F1B434] text-white'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
+                      }`}
                   >
                     {topic}
                   </button>

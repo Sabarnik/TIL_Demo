@@ -55,7 +55,8 @@ const HistoryRoulette: React.FC<{ milestones: Milestone[]; autoPlayInterval?: nu
 
             <div className="flex flex-col lg:flex-row items-center gap-8">
                 {/* Circular Timeline */}
-                <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 flex items-center justify-center">
+                <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 flex items-center justify-center">
+
                     {/* Outer circle track */}
                     <div className="absolute w-full h-full rounded-full border-2 border-dashed border-gray-200" />
 
@@ -149,7 +150,7 @@ const HistoryRoulette: React.FC<{ milestones: Milestone[]; autoPlayInterval?: nu
                                 }}
                                 className="px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition-all shadow-sm text-sm font-medium"
                             >
-                                Random Milestone
+                                Milestones
                             </button>
                         </div>
                     </div>
@@ -173,189 +174,192 @@ const HistoryCarousel: React.FC<{
     acceleratedIntervalMs = 1000,
     accelerationDurationMs = 5000
 }) => {
-    const [index, setIndex] = useState(0);
-    const [paused, setPaused] = useState(false);
-    const [speedUp, setSpeedUp] = useState(false);
-    const timerRef = useRef<NodeJS.Timeout | null>(null);
-    const accelTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+        const [index, setIndex] = useState(0);
+        const [paused, setPaused] = useState(false);
+        const [speedUp, setSpeedUp] = useState(false);
+        const timerRef = useRef<NodeJS.Timeout | null>(null);
+        const accelTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    const total = milestones.length;
+        const total = milestones.length;
 
-    const next = useCallback(() => {
-        setIndex(prev => (prev + 1) % total);
-    }, [total]);
+        const next = useCallback(() => {
+            setIndex(prev => (prev + 1) % total);
+        }, [total]);
 
-    const prev = useCallback(() => {
-        setIndex(prev => (prev - 1 + total) % total);
-    }, [total]);
+        const prev = useCallback(() => {
+            setIndex(prev => (prev - 1 + total) % total);
+        }, [total]);
 
-    const clearTimer = () => {
-        if (timerRef.current) {
-            clearInterval(timerRef.current);
-            timerRef.current = null;
-        }
-    };
-
-    const startTimer = useCallback(() => {
-        clearTimer();
-        if (!paused) {
-            const interval = speedUp ? acceleratedIntervalMs : baseIntervalMs;
-            timerRef.current = setInterval(next, interval);
-        }
-    }, [paused, speedUp, baseIntervalMs, acceleratedIntervalMs, next]);
-
-    useEffect(() => {
-        startTimer();
-        return clearTimer;
-    }, [startTimer]);
-
-    const handleMouseEnter = () => {
-        setPaused(true);
-        clearTimer();
-    };
-    
-    const handleMouseLeave = () => {
-        setPaused(false);
-        startTimer();
-    };
-
-    const handleSpeedUp = () => {
-        setSpeedUp(true);
-        if (accelTimeoutRef.current) clearTimeout(accelTimeoutRef.current);
-        accelTimeoutRef.current = setTimeout(() => setSpeedUp(false), accelerationDurationMs);
-    };
-
-    useEffect(() => {
-        return () => {
-            if (accelTimeoutRef.current) clearTimeout(accelTimeoutRef.current);
+        const clearTimer = () => {
+            if (timerRef.current) {
+                clearInterval(timerRef.current);
+                timerRef.current = null;
+            }
         };
-    }, []);
 
-    const handleWheel = (e: React.WheelEvent) => {
-        if (Math.abs(e.deltaY) < 2) return;
-        if (e.deltaY > 0) next();
-        else prev();
-    };
+        const startTimer = useCallback(() => {
+            clearTimer();
+            if (!paused) {
+                const interval = speedUp ? acceleratedIntervalMs : baseIntervalMs;
+                timerRef.current = setInterval(next, interval);
+            }
+        }, [paused, speedUp, baseIntervalMs, acceleratedIntervalMs, next]);
 
-    const current = milestones[index];
+        useEffect(() => {
+            startTimer();
+            return clearTimer;
+        }, [startTimer]);
 
-    return (
-        <div
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            onWheel={handleWheel}
-            className="relative w-full bg-white rounded-xl shadow-lg p-6"
-            role="region"
-            aria-label="Company history timeline"
-        >
-            <div className="flex flex-col lg:flex-row gap-8">
-                {/* Empty left column to push content to right */}
-                <div className="hidden lg:block lg:w-1/2"></div>
+        const handleMouseEnter = () => {
+            setPaused(true);
+            clearTimer();
+        };
 
-                {/* Right Column - Timeline Content */}
-                <div className="lg:w-1/2 bg-gray-50 p-6 rounded-lg border border-gray-200 overflow-hidden">
-                    <div className="mb-6 text-center">
-                        <h2 className="text-2xl font-bold text-gray-800">Our Timeline</h2>
-                        <div className="w-20 h-1 bg-gradient-to-r from-[#F1B434] to-[#FFE352] mx-auto mt-3 rounded-full" />
-                    </div>
+        const handleMouseLeave = () => {
+            setPaused(false);
+            startTimer();
+        };
 
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="text-sm text-gray-500 font-medium">
-                            {String(index + 1).padStart(2, '0')}/{String(total).padStart(2, '0')}
+        const handleSpeedUp = () => {
+            setSpeedUp(true);
+            if (accelTimeoutRef.current) clearTimeout(accelTimeoutRef.current);
+            accelTimeoutRef.current = setTimeout(() => setSpeedUp(false), accelerationDurationMs);
+        };
+
+        useEffect(() => {
+            return () => {
+                if (accelTimeoutRef.current) clearTimeout(accelTimeoutRef.current);
+            };
+        }, []);
+
+        const handleWheel = (e: React.WheelEvent) => {
+            if (Math.abs(e.deltaY) < 2) return;
+            if (e.deltaY > 0) next();
+            else prev();
+        };
+
+        const current = milestones[index];
+
+        return (
+            <div
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                onWheel={handleWheel}
+                className="relative w-full bg-white rounded-xl shadow-lg p-6"
+                role="region"
+                aria-label="Company history timeline"
+            >
+                <div className="flex flex-col lg:flex-row gap-8">
+                    {/* Empty left column to push content to right */}
+                    <div className="hidden lg:block lg:w-1/2"></div>
+
+                    {/* Right Column - Timeline Content */}
+                    <div className="lg:w-1/2 bg-gray-50 p-6 rounded-lg border border-gray-200 overflow-hidden">
+                        <div className="mb-6 text-center">
+                            <h2 className="text-2xl font-bold text-gray-800">Our Timeline</h2>
+                            <div className="w-20 h-1 bg-gradient-to-r from-[#F1B434] to-[#FFE352] mx-auto mt-3 rounded-full" />
                         </div>
-                        <div className="flex items-center gap-2">
-                            <button
-                                onClick={prev}
-                                className="px-3 py-1.5 text-sm rounded bg-white border border-gray-200 hover:bg-gray-50 shadow-sm flex items-center gap-1"
-                                aria-label="Previous milestone"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
-                                </svg>
-                                Prev
-                            </button>
-                            <button
-                                onClick={next}
-                                className="px-3 py-1.5 text-sm rounded bg-white border border-gray-200 hover:bg-gray-50 shadow-sm flex items-center gap-1"
-                                aria-label="Next milestone"
-                            >
-                                Next
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-                                </svg>
-                            </button>
-                            <button
-                                onClick={handleSpeedUp}
-                                className={`px-3 py-1.5 text-sm rounded border flex items-center gap-1 ${speedUp
-                                    ? 'bg-[#F1B434] text-white border-[#F1B434]'
-                                    : 'bg-white text-gray-800 border-gray-200 hover:bg-gray-50'
-                                    } shadow-sm`}
-                                aria-pressed={speedUp}
-                                aria-label="Speed up timeline"
-                            >
-                                <Zap className="w-4 h-4" />
-                                Speed Up
-                            </button>
-                        </div>
-                    </div>
 
-                    <div className="relative h-32 md:h-28">
-                        <AnimatePresence mode="wait">
-                            <motion.div
-                                key={current.year + current.event}
-                                initial={{ y: 20, opacity: 0, rotateX: 10 }}
-                                animate={{ y: 0, opacity: 1, rotateX: 0 }}
-                                exit={{ y: -20, opacity: 0, rotateX: -10 }}
-                                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                                className="absolute inset-0 flex flex-col justify-center"
-                            >
-                                <div className="flex items-center gap-3 mb-2">
-                                    <div className="bg-[#F1B434] text-white text-sm font-bold px-2 py-1 rounded">
-                                        {current.year}
+                        <div className="flex items-center justify-between mb-4">
+                            <div className="text-sm text-gray-500 font-medium">
+                                {String(index + 1).padStart(2, '0')}/{String(total).padStart(2, '0')}
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={prev}
+                                    className="px-3 py-1.5 text-sm rounded bg-white border border-gray-200 hover:bg-gray-50 shadow-sm flex items-center gap-1"
+                                    aria-label="Previous milestone"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
+                                    </svg>
+                                    Prev
+                                </button>
+                                <button
+                                    onClick={next}
+                                    className="px-3 py-1.5 text-sm rounded bg-white border border-gray-200 hover:bg-gray-50 shadow-sm flex items-center gap-1"
+                                    aria-label="Next milestone"
+                                >
+                                    Next
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                                    </svg>
+                                </button>
+                                <button
+                                    onClick={handleSpeedUp}
+                                    className={`px-3 py-1.5 text-sm rounded border flex items-center gap-1 ${speedUp
+                                        ? 'bg-[#F1B434] text-white border-[#F1B434]'
+                                        : 'bg-white text-gray-800 border-gray-200 hover:bg-gray-50'
+                                        } shadow-sm`}
+                                    aria-pressed={speedUp}
+                                    aria-label="Speed up timeline"
+                                >
+                                    <Zap className="w-4 h-4" />
+                                    Speed Up
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="relative h-32 md:h-40 overflow-hidden">
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={current.year + current.event}
+                                    initial={{ y: 20, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    exit={{ y: -20, opacity: 0 }}
+                                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                                    className="absolute inset-0 flex flex-col justify-center"
+                                >
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <div className="bg-[#F1B434] text-white text-sm font-bold px-2 py-1 rounded">
+                                            {current.year}
+                                        </div>
                                     </div>
-                                </div>
-                                <p className="text-gray-700 text-lg leading-relaxed">{current.event}</p>
-                            </motion.div>
-                        </AnimatePresence>
-                    </div>
-
-                    {current.image && (
-                        <div className="mt-4 rounded-lg overflow-hidden shadow-md">
-                            <img
-                                src={current.image}
-                                alt={current.year}
-                                className="w-full h-48 object-cover"
-                            />
+                                    <p className="text-gray-700 text-lg leading-relaxed line-clamp-4">
+                                        {current.event}
+                                    </p>
+                                </motion.div>
+                            </AnimatePresence>
                         </div>
-                    )}
 
-                    <div className="mt-6">
-                        <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                            <motion.div
-                                key={index + (speedUp ? '-fast' : '-base')}
-                                initial={{ width: '0%' }}
-                                animate={{ width: '100%' }}
-                                transition={{
-                                    duration: (speedUp ? acceleratedIntervalMs : baseIntervalMs) / 1000,
-                                    ease: 'linear'
-                                }}
-                                className="h-2 bg-gradient-to-r from-[#F1B434] to-[#FFE352]"
-                            />
-                        </div>
-                        <div className="mt-2 text-xs text-gray-500 flex justify-between">
-                            <span>
-                                {paused ? 'Paused (hover to pause)' : speedUp ? 'Fast Mode' : 'Auto-rotating'}
-                            </span>
-                            <span>
-                                {Math.round((speedUp ? acceleratedIntervalMs : baseIntervalMs) / 1000)}s interval
-                            </span>
+
+                        {current.image && (
+                            <div className="mt-4 rounded-lg overflow-hidden shadow-md">
+                                <img
+                                    src={current.image}
+                                    alt={current.year}
+                                    className="w-full h-48 object-cover"
+                                />
+                            </div>
+                        )}
+
+                        <div className="mt-6">
+                            <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                                <motion.div
+                                    key={index + (speedUp ? '-fast' : '-base')}
+                                    initial={{ width: '0%' }}
+                                    animate={{ width: '100%' }}
+                                    transition={{
+                                        duration: (speedUp ? acceleratedIntervalMs : baseIntervalMs) / 1000,
+                                        ease: 'linear'
+                                    }}
+                                    className="h-2 bg-gradient-to-r from-[#F1B434] to-[#FFE352]"
+                                />
+                            </div>
+                            <div className="mt-2 text-xs text-gray-500 flex justify-between">
+                                <span>
+                                    {paused ? 'Paused (hover to pause)' : speedUp ? 'Fast Mode' : 'Auto-rotating'}
+                                </span>
+                                <span>
+                                    {Math.round((speedUp ? acceleratedIntervalMs : baseIntervalMs) / 1000)}s interval
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    );
-};
+        );
+    };
 
 const PageContent = () => {
     const router = useRouter();
@@ -422,34 +426,38 @@ const PageContent = () => {
         leadership: {
             items: [
                 {
-                    name: 'Board of Directors',
-                    description: 'Meet our governing body and strategic advisors',
-                    image: `${basePath}/board-directors.jpg`
+                    name: "Board of Directors",
+                    description: "Meet our governing body and strategic advisors",
+                    image: `${basePath}/board-directors.jpg`,
                 },
                 {
-                    name: 'Executive Team',
-                    description: 'Our day-to-day leadership team',
-                    image: `${basePath}/executive-team.jpg`
+                    name: "Executive Team",
+                    description: "Our day-to-day leadership team",
+                    image: `${basePath}/executive-team.jpg`,
                 },
                 {
-                    name: 'Management Committee',
-                    description: 'Department heads and functional leaders',
-                    image: `${basePath}/management-committee.jpg`
+                    name: "Management Committee",
+                    description: "Department heads and functional leaders",
+                    image: `${basePath}/management-committee.jpg`,
                 },
                 {
-                    name: 'Advisory Board',
-                    description: 'Industry experts guiding our strategy',
-                    image: `${basePath}/advisory-board.jpg`
-                }
+                    name: "Advisory Board",
+                    description: "Industry experts guiding our strategy",
+                    image: `${basePath}/advisory-board.jpg`,
+                },
             ],
             media: {
                 image: `${basePath}/leadership.jpg`,
-                title: 'Leadership Team',
+                title: "Leadership Team",
                 description:
-                    'Experienced leaders driving innovation and growth in the construction industry.',
-                cta: 'Meet Our Team',
-                features: ['Industry Veterans', 'Global Experience', 'Innovation Focus']
-            }
+                    "Experienced leaders driving innovation and growth in the construction industry.",
+                cta: "Meet Our Team",
+                features: [
+                    "Industry Veterans",
+                    "Global Experience",
+                    "Innovation Focus",
+                ],
+            },
         },
         milestones: {
             items: [
@@ -1254,11 +1262,11 @@ const PageContent = () => {
                                 Our team is ready to answer any questions you may have about our company, products, or services.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                               <Link href="/contact-us" passHref>
-  <button className="px-6 py-3 bg-[#F1B434] text-white font-medium rounded-lg hover:bg-[#d89c2a] transition-colors shadow-md">
-    Contact Us
-  </button>
-</Link>
+                                <Link href={`${basePath}/contact-us`} passHref>
+                                    <button className="px-6 py-3 bg-[#F1B434] text-white font-medium rounded-lg hover:bg-[#d89c2a] transition-colors shadow-md">
+                                        Contact Us
+                                    </button>
+                                </Link>
                                 <button className="px-6 py-3 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm">
                                     Download Company Profile
                                 </button>
@@ -1272,9 +1280,9 @@ const PageContent = () => {
 };
 
 export default function Page() {
-  return (
-    <Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
-      <PageContent />
-    </Suspense>
-  );
+    return (
+        <Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
+            <PageContent />
+        </Suspense>
+    );
 }

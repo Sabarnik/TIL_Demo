@@ -3,11 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Play, FileText } from 'lucide-react';
 import Hero3D from './Hero3D';
+import { useRouter } from "next/navigation";
+
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 const Hero: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
 
+  const router = useRouter();
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -96,47 +99,45 @@ const Hero: React.FC = () => {
               </motion.div>
 
               {/* CTA Buttons */}
-<motion.div
-  initial={{ opacity: 0, y: 30 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.8, delay: 1.7 }}
-  className={`flex gap-3 ${isMobile ? 'flex-col w-full' : 'flex-col sm:flex-row'}`}
->
-  {/* Explore Products */}
-  <motion.button
-    onClick={() => (window.location.href = '/category')}
-    whileHover={{
-      scale: 1.05,
-      boxShadow: '0 0 40px rgba(241, 180, 52, 0.8)',
-    }}
-    whileTap={{ scale: 0.95 }}
-    className={`group inline-flex items-center justify-center px-6 py-3 bg-gradient-to-l to-[#f1b434] from-[#ffe353] via-[#f1b434]/60 text-black font-bold rounded-xl transition-all duration-300 shadow-xl border border-yellow-400/60 ${
-      isMobile ? 'w-full' : ''
-    }`}
-    style={{ fontFamily: 'Arial, sans-serif' }}
-  >
-    <span className="text-sm lg:text-base">Explore Products</span>
-    <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-  </motion.button>
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 1.7 }}
+                className={`flex gap-3 ${isMobile ? 'flex-col w-full' : 'flex-col sm:flex-row'}`}
+              >
+                {/* Explore Products */}
 
-  {/* Get Quote */}
-  <motion.button
-    onClick={() => (window.location.href = '/get-quote')}
-    whileHover={{
-      scale: 1.05,
-      backgroundColor: 'rgba(0,0,0,0.85)',
-      borderColor: '#f1b434',
-    }}
-    whileTap={{ scale: 0.95 }}
-    className={`group inline-flex items-center justify-center px-6 py-3 border-2 border-white/80 bg-black/60 text-white font-semibold rounded-xl transition-all duration-300 backdrop-blur-md hover:text-[#f1b434] shadow-xl ${
-      isMobile ? 'w-full' : ''
-    }`}
-    style={{ fontFamily: 'Arial, sans-serif' }}
-  >
-    <FileText className="mr-2 w-4 h-4 group-hover:scale-110 transition-transform" />
-    <span className="text-sm lg:text-base">Get Quote</span>
-  </motion.button>
-</motion.div>
+                <motion.button
+                  onClick={() => router.push(`${basePath}/category`)}
+                  whileHover={{
+                    scale: 1.05,
+                    boxShadow: "0 0 40px rgba(241, 180, 52, 0.8)",
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`group inline-flex items-center justify-center px-6 py-3 bg-gradient-to-l to-[#f1b434] from-[#ffe353] via-[#f1b434]/60 text-black font-bold rounded-xl transition-all duration-300 shadow-xl border border-yellow-400/60 ${isMobile ? "w-full" : ""
+                    }`}
+                  style={{ fontFamily: "Arial, sans-serif" }}
+                >
+                  <span className="text-sm lg:text-base">Explore Products</span>
+                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </motion.button>
+                {/* Get Quote */}
+                <motion.button
+                  onClick={() => (window.location.href = '/get-quote')}
+                  whileHover={{
+                    scale: 1.05,
+                    backgroundColor: 'rgba(0,0,0,0.85)',
+                    borderColor: '#f1b434',
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`group inline-flex items-center justify-center px-6 py-3 border-2 border-white/80 bg-black/60 text-white font-semibold rounded-xl transition-all duration-300 backdrop-blur-md hover:text-[#f1b434] shadow-xl ${isMobile ? 'w-full' : ''
+                    }`}
+                  style={{ fontFamily: 'Arial, sans-serif' }}
+                >
+                  <FileText className="mr-2 w-4 h-4 group-hover:scale-110 transition-transform" />
+                  <span className="text-sm lg:text-base">Get Quote</span>
+                </motion.button>
+              </motion.div>
 
             </motion.div>
           </div>

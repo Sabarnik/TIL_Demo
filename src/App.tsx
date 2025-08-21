@@ -15,7 +15,7 @@ import SleekFooter from './components/SleekFooter';
 import SearchModal from './components/SearchModal';
 
 import BlogListPage from './app/media/blog/page';
-import BlogViewPage from './app/media/blog/[slug]/page';
+import BlogViewPage from './app/media/blog/[title]/page';
 import NewsPage from './app/media/news/page';
 import NewsArticlePage from './app/media/news/[title]/page';
 import InvestorRelations from './app/investor-relations/page';

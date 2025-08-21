@@ -1,15 +1,15 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Calendar, 
-  Clock, 
-  Heart, 
-  MessageCircle, 
-  Share2, 
-  Facebook, 
-  Twitter, 
-  Linkedin, 
+import {
+  Calendar,
+  Clock,
+  Heart,
+  MessageCircle,
+  Share2,
+  Facebook,
+  Twitter,
+  Linkedin,
   Link as LinkIcon,
   ArrowLeft,
   User,
@@ -28,17 +28,17 @@ const SkeletonLoader = () => {
       {/* Header Skeleton */}
       <div className="relative h-72 w-full overflow-hidden bg-gray-300">
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10" />
-        
+
         <div className="absolute inset-0 z-20 flex items-center pt-6">
           <div className="max-w-4xl mx-auto px-6 md:px-10 w-full">
             <div className="mb-4">
               <div className="h-6 w-24 bg-gray-400 rounded-md animate-pulse"></div>
             </div>
-            
+
             <div className="h-6 w-40 bg-gray-400 rounded-md animate-pulse mb-4"></div>
-            
+
             <div className="h-12 bg-gray-400 rounded-md animate-pulse mb-6 w-3/4"></div>
-            
+
             <div className="flex flex-wrap items-center gap-4">
               <div className="h-8 w-8 bg-gray-400 rounded-full animate-pulse"></div>
               <div className="h-4 w-32 bg-gray-400 rounded-md animate-pulse"></div>
@@ -58,23 +58,23 @@ const SkeletonLoader = () => {
               <div className="h-8 w-24 bg-gray-300 rounded-full animate-pulse"></div>
               <div className="h-8 w-28 bg-gray-300 rounded-full animate-pulse"></div>
             </div>
-            
+
             <div className="h-6 w-full bg-gray-300 rounded-md animate-pulse mb-4"></div>
             <div className="h-6 w-3/4 bg-gray-300 rounded-md animate-pulse mb-8"></div>
-            
+
             <div className="h-6 w-64 bg-gray-300 rounded-md animate-pulse mb-4"></div>
             <div className="h-4 w-full bg-gray-300 rounded-md animate-pulse mb-4"></div>
             <div className="h-4 w-full bg-gray-300 rounded-md animate-pulse mb-4"></div>
             <div className="h-4 w-3/4 bg-gray-300 rounded-md animate-pulse mb-8"></div>
-            
+
             <div className="h-40 w-full bg-gray-300 rounded-lg animate-pulse mb-4"></div>
-            
+
             <div className="h-6 w-64 bg-gray-300 rounded-md animate-pulse mb-4"></div>
             <div className="h-4 w-full bg-gray-300 rounded-md animate-pulse mb-4"></div>
             <div className="h-4 w-full bg-gray-300 rounded-md animate-pulse mb-4"></div>
             <div className="h-4 w-3/4 bg-gray-300 rounded-md animate-pulse"></div>
           </div>
-          
+
           {/* Action Bar Skeleton */}
           <div className="border-t border-gray-200 p-6 flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -82,10 +82,10 @@ const SkeletonLoader = () => {
               <div className="h-6 w-16 bg-gray-300 rounded-md animate-pulse"></div>
               <div className="h-6 w-16 bg-gray-300 rounded-md animate-pulse"></div>
             </div>
-            
+
             <div className="h-6 w-32 bg-gray-300 rounded-md animate-pulse"></div>
           </div>
-          
+
           {/* Author Bio Skeleton */}
           <div className="border-t border-gray-200 p-6 bg-gray-50">
             <div className="flex items-start gap-4">
@@ -98,11 +98,11 @@ const SkeletonLoader = () => {
               </div>
             </div>
           </div>
-          
+
           {/* Comments Section Skeleton */}
           <div className="border-t border-gray-200 p-6">
             <div className="h-6 w-40 bg-gray-300 rounded-md animate-pulse mb-6"></div>
-            
+
             <div className="flex gap-4 mb-8">
               <div className="w-10 h-10 bg-gray-300 rounded-full animate-pulse"></div>
               <div className="flex-1">
@@ -110,7 +110,7 @@ const SkeletonLoader = () => {
                 <div className="h-10 w-32 bg-gray-300 rounded-md animate-pulse ml-auto"></div>
               </div>
             </div>
-            
+
             <div className="space-y-6">
               {[1, 2].map(item => (
                 <div key={item} className="flex gap-4">
@@ -126,7 +126,7 @@ const SkeletonLoader = () => {
             </div>
           </div>
         </div>
-        
+
         {/* Related Posts Skeleton */}
         <div className="mt-12">
           <div className="h-6 w-56 bg-gray-300 rounded-md animate-pulse mb-6"></div>
@@ -330,28 +330,45 @@ const BlogViewPage: React.FC = () => {
     // Simulate loading delay
     const timer = setTimeout(() => {
       // Find the current post based on URL parameter
-      const slug = params.slug as string;
-      const postTitle = slug.split('-').join(' ');
-      const foundPost = featuredPosts.find(p => 
-        p.title.toLowerCase() === postTitle.toLowerCase()
-      );
-      
+      const slug = params.title as string;
+
+      // Create a normalized version for comparison (remove special chars, lowercase)
+      const normalizedSlug = slug.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, ' ');
+
+      const foundPost = featuredPosts.find(p => {
+        // Normalize the post title similarly for comparison
+        const normalizedTitle = p.title.toLowerCase()
+          .replace(/[^a-z0-9\s]/g, '') // Remove special characters
+          .replace(/\s+/g, ' ');        // Normalize spaces
+
+        return normalizedTitle.includes(normalizedSlug) ||
+          normalizedSlug.includes(normalizedTitle);
+      });
+
       if (foundPost) {
         setPost(foundPost);
         setLikes(parseInt(foundPost.likes.replace(/,/g, '')));
         setComments(sampleComments);
-        
+
         // Find related posts (same tags or same column)
         const related = featuredPosts
           .filter(p => p.id !== foundPost.id)
-          .filter(p => 
-            p.tags.some(tag => foundPost.tags.includes(tag)) || 
+          .filter(p =>
+            p.tags.some(tag => foundPost.tags.includes(tag)) ||
             p.column === foundPost.column
           )
           .slice(0, 3);
-        
+
         setRelatedPosts(related);
+      } else {
+        // Fallback: if no match found, use the first post
+        console.warn('Post not found by slug, using first post as fallback');
+        setPost(featuredPosts[0]);
+        setLikes(parseInt(featuredPosts[0].likes.replace(/,/g, '')));
+        setComments(sampleComments);
+        setRelatedPosts(featuredPosts.filter(p => p.id !== featuredPosts[0].id).slice(0, 3));
       }
+
       setLoading(false);
     }, 1500);
 
@@ -401,8 +418,8 @@ const BlogViewPage: React.FC = () => {
   const handleShare = (platform: string) => {
     const url = window.location.href;
     const title = post?.title || '';
-    
-    switch(platform) {
+
+    switch (platform) {
       case 'facebook':
         window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
         break;
@@ -418,7 +435,7 @@ const BlogViewPage: React.FC = () => {
         alert('Link copied to clipboard!');
         break;
     }
-    
+
     setShowShareOptions(false);
   };
 
@@ -432,9 +449,9 @@ const BlogViewPage: React.FC = () => {
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-800">Post not found</h2>
           <p className="text-gray-600 mt-2">The article you're looking for doesn't exist.</p>
-          <button 
-            onClick={() => router.push('/media/blog')}
-            className="mt-4 px-4 py-2 bg-[#F1B434] text-white rounded-md hover:bg-[#d89c2a] transition-colors"
+          <button
+            onClick={() => router.push(`${basePath}/media/blog`)}
+            className="mt-8 px-4 py-2 bg-[#F1B434] text-white rounded-md hover:bg-[#d89c2a] transition-colors"
           >
             Back to Blog
           </button>
@@ -453,19 +470,11 @@ const BlogViewPage: React.FC = () => {
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10" />
-        
+        <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/60 to-transparent z-20" />
+
         <div className="absolute inset-0 z-20 flex items-center pt-6">
           <div className="max-w-4xl mx-auto px-6 md:px-10 w-full">
-            <div className="mb-4">
-              <Link 
-                href="/media/blog"
-                className="inline-flex items-center text-white hover:text-[#F1B434] transition-colors"
-              >
-                <ArrowLeft size={18} className="mr-2" />
-                Back to Blog
-              </Link>
-            </div>
-            
+
             <motion.span
               className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#F1B434] to-[#FFE352] text-sm font-bold tracking-tight mb-2"
               initial={{ opacity: 0 }}
@@ -474,7 +483,7 @@ const BlogViewPage: React.FC = () => {
             >
               {post.column.toUpperCase()}
             </motion.span>
-            
+
             <motion.h1
               className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight"
               initial={{ opacity: 0, y: 20 }}
@@ -483,7 +492,7 @@ const BlogViewPage: React.FC = () => {
             >
               {post.title}
             </motion.h1>
-            
+
             <motion.div
               className="flex flex-wrap items-center gap-4 text-gray-200"
               initial={{ opacity: 0 }}
@@ -521,7 +530,7 @@ const BlogViewPage: React.FC = () => {
           <article className="prose prose-lg max-w-none p-8">
             <div className="flex flex-wrap gap-2 mb-6">
               {post.tags.map((tag: string, index: number) => (
-                <span 
+                <span
                   key={index}
                   className="px-3 py-1 bg-[#F1B434]/10 text-[#F1B434] rounded-full text-sm"
                 >
@@ -529,14 +538,14 @@ const BlogViewPage: React.FC = () => {
                 </span>
               ))}
             </div>
-            
+
             <p className="lead text-gray-700 text-xl mb-8 font-medium">
               {post.excerpt}
             </p>
-            
+
             <div dangerouslySetInnerHTML={{ __html: post.content }} />
           </article>
-          
+
           {/* Action Bar */}
           <div className="border-t border-gray-200 p-6 flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-4">
@@ -552,23 +561,23 @@ const BlogViewPage: React.FC = () => {
                 />
                 <span>{likes.toLocaleString()}</span>
               </motion.button>
-              
+
               <button className="flex items-center gap-2 text-gray-600 hover:text-[#F1B434] transition-colors">
                 <MessageCircle size={20} />
                 <span>{comments.length}</span>
               </button>
-              
+
               <div className="relative">
-                <button 
+                <button
                   onClick={() => setShowShareOptions(!showShareOptions)}
                   className="flex items-center gap-2 text-gray-600 hover:text-[#F1B434] transition-colors"
                 >
                   <Share2 size={20} />
                   <span>Share</span>
                 </button>
-                
+
                 {showShareOptions && (
-                  <motion.div 
+                  <motion.div
                     className="absolute bottom-full left-0 mb-2 w-48 bg-white rounded-md shadow-lg py-2 z-10 border border-gray-200"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -605,7 +614,7 @@ const BlogViewPage: React.FC = () => {
                 )}
               </div>
             </div>
-            
+
             <button
               onClick={toggleSavePost}
               className="flex items-center gap-2 text-gray-600 hover:text-[#F1B434] transition-colors"
@@ -618,7 +627,7 @@ const BlogViewPage: React.FC = () => {
               <span>{savedPosts.includes(post.id) ? 'Saved' : 'Save for later'}</span>
             </button>
           </div>
-          
+
           {/* Author Bio */}
           <div className="border-t border-gray-200 p-6 bg-gray-50">
             <div className="flex items-start gap-4">
@@ -644,11 +653,11 @@ const BlogViewPage: React.FC = () => {
               </div>
             </div>
           </div>
-          
+
           {/* Comments Section */}
           <div className="border-t border-gray-200 p-6">
             <h3 className="text-xl font-bold text-gray-800 mb-6">Comments ({comments.length})</h3>
-            
+
             <form onSubmit={handleCommentSubmit} className="mb-8">
               <div className="flex gap-4">
                 <div className="flex-shrink-0">
@@ -676,7 +685,7 @@ const BlogViewPage: React.FC = () => {
                 </div>
               </div>
             </form>
-            
+
             <div className="space-y-6">
               {comments.map(comment => (
                 <div key={comment.id} className="flex gap-4">
@@ -708,18 +717,18 @@ const BlogViewPage: React.FC = () => {
             </div>
           </div>
         </div>
-        
+
         {/* Related Posts */}
         {relatedPosts.length > 0 && (
           <div className="mt-12">
             <h3 className="text-2xl font-bold text-gray-800 mb-6">Related Articles</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {relatedPosts.map(relatedPost => (
-                <motion.div 
-                  key={relatedPost.id} 
+                <motion.div
+                  key={relatedPost.id}
                   className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
                   whileHover={{ y: -5 }}
-                  onClick={() => router.push(`/media/blog/${encodeURIComponent(relatedPost.title.replace(/\s+/g, '-').toLowerCase())}`)}
+                  onClick={() => router.push(`${basePath}/media/blog/${encodeURIComponent(relatedPost.title.replace(/\s+/g, '-').toLowerCase())}`)}
                 >
                   <div className="h-40 overflow-hidden">
                     <img

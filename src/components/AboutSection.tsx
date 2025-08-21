@@ -2,6 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Target, Shield, Building2, Globe } from 'lucide-react';
+import Link from 'next/link';
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 
@@ -56,19 +57,36 @@ const AboutSection: React.FC = () => {
                 adopted new values while maintaining our commitment to excellence.
               </p>
 
-              <motion.a
-                href="/about-us"
+              <Link
+                href={`${basePath}/about-us`}
                 className="inline-flex items-center text-lg font-semibold mb-8 group"
-                whileHover={{ x: 5 }}
+                style={{ fontFamily: "Arial, sans-serif" }}
               >
-                <span className="bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent group-hover:bg-gradient-to-r group-hover:from-yellow-400 group-hover:to-orange-400">
-                  Read More
-                </span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-2 transition-transform group-hover:translate-x-1 text-orange-500">
-                  <path d="M5 12h14"></path>
-                  <path d="m12 5 7 7-7 7"></path>
-                </svg>
-              </motion.a>
+                <motion.span
+                  whileHover={{ x: 5 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex items-center"
+                >
+                  <span className="bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent group-hover:from-yellow-400 group-hover:to-orange-400">
+                    Read More
+                  </span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="ml-2 transition-transform group-hover:translate-x-1 text-orange-500"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </motion.span>
+              </Link>
 
               {/* Achievement Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -84,7 +102,7 @@ const AboutSection: React.FC = () => {
                   >
                     {/* Enhanced golden glow effect */}
                     <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-yellow-400/60 via-yellow-300/40 to-transparent pointer-events-none"></div>
-                    
+
                     <div className="flex items-center gap-3 relative z-10">
                       <div className="p-2 rounded-lg bg-yellow-200 bg-opacity-50 flex-shrink-0 group-hover:bg-opacity-70 transition-all duration-300">
                         <achievement.icon size={20} className="opacity-90" />

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, Clock, Heart, MessageCircle } from 'lucide-react';
+import Link from 'next/link';
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 
 const BlogSection: React.FC = () => {
@@ -67,7 +68,7 @@ const BlogSection: React.FC = () => {
       featuredImage: `${basePath}/blog3.jpg`
     }
   ];
-  
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       month: 'short',
@@ -76,9 +77,9 @@ const BlogSection: React.FC = () => {
   };
 
   const toggleSavePost = (postId: number) => {
-    setSavedPosts(prev => 
-      prev.includes(postId) 
-        ? prev.filter(id => id !== postId) 
+    setSavedPosts(prev =>
+      prev.includes(postId)
+        ? prev.filter(id => id !== postId)
         : [...prev, postId]
     );
   };
@@ -90,7 +91,7 @@ const BlogSection: React.FC = () => {
   return (
     <section className="py-16 bg-gradient-to-b from-[#f8f9fa] to-white">
       <div className="max-w-7xl mx-auto px-6 md:px-10 xl:px-20">
-        
+
         {/* Header */}
         <motion.div
           className="text-center mb-12"
@@ -101,7 +102,7 @@ const BlogSection: React.FC = () => {
         >
           <motion.span
             className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#F1B434] to-[#FFE352] text-lg font-bold tracking-tight"
-            initial={{ 
+            initial={{
               opacity: 0,
               letterSpacing: "-0.05em"
             }}
@@ -109,7 +110,7 @@ const BlogSection: React.FC = () => {
               opacity: 1,
               letterSpacing: "0.02em",
             }}
-            transition={{ 
+            transition={{
               duration: 0.8,
               delay: 0.2,
               ease: [0.16, 0.77, 0.47, 0.97]
@@ -147,12 +148,12 @@ const BlogSection: React.FC = () => {
                     <div className="flex-1">
                       {/* Author Info */}
                       <div className="flex items-center gap-3 mb-2">
-                        <button 
+                        <button
                           onClick={() => toggleAuthorDetails(post.id)}
                           className="flex-shrink-0"
                         >
-                          <img 
-                            src={post.author.avatar} 
+                          <img
+                            src={post.author.avatar}
                             alt={post.author.name}
                             width={32}
                             height={32}
@@ -163,7 +164,7 @@ const BlogSection: React.FC = () => {
                           <span>In </span>
                           <span className="font-semibold text-gray-700">{post.column}</span>
                           <span> by </span>
-                          <button 
+                          <button
                             onClick={() => toggleAuthorDetails(post.id)}
                             className="font-medium text-gray-700 hover:text-[#F1B434]"
                           >
@@ -176,8 +177,8 @@ const BlogSection: React.FC = () => {
                       {expandedAuthor === post.id && (
                         <div className="bg-white p-3 rounded-lg shadow-md mb-3 border border-gray-200 text-sm">
                           <div className="flex items-start gap-3">
-                            <img 
-                              src={post.author.avatar} 
+                            <img
+                              src={post.author.avatar}
                               alt={post.author.name}
                               width={40}
                               height={40}
@@ -196,9 +197,9 @@ const BlogSection: React.FC = () => {
                       <h4 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-[#F1B434] transition-colors">
                         {post.title}
                       </h4>
-                      
+
                       <p className="text-sm text-gray-600 mb-3">{post.excerpt}</p>
-                      
+
                       {/* Post Actions and Metadata */}
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3 text-xs text-gray-500">
@@ -211,15 +212,15 @@ const BlogSection: React.FC = () => {
                             <span>{post.readTime}</span>
                           </div>
                         </div>
-                        
+
                         <div className="flex items-center gap-3">
-                          <button 
+                          <button
                             className="flex items-center gap-1 text-xs text-gray-500 hover:text-[#F1B434]"
                             onClick={() => toggleSavePost(post.id)}
                           >
-                            <Heart 
-                              size={14} 
-                              fill={savedPosts.includes(post.id) ? "#F1B434" : "none"} 
+                            <Heart
+                              size={14}
+                              fill={savedPosts.includes(post.id) ? "#F1B434" : "none"}
                               className={savedPosts.includes(post.id) ? "text-[#F1B434]" : ""}
                             />
                             <span>{post.likes}</span>
@@ -234,8 +235,8 @@ const BlogSection: React.FC = () => {
 
                     {/* Image on the right */}
                     <div className="flex-shrink-0 w-32 h-32 rounded-lg overflow-hidden relative">
-                      <img 
-                        src={post.image} 
+                      <img
+                        src={post.image}
                         alt={post.title}
                         width={800}
                         height={600}
@@ -251,13 +252,13 @@ const BlogSection: React.FC = () => {
           {/* Recent Posts (Right) */}
           <div className="lg:col-span-1">
             <h3 className="text-2xl font-bold text-gray-800 mb-6">Popular Reads</h3>
-            
+
             <div className="bg-white rounded-xl shadow-lg overflow-hidden sticky top-6">
               {/* Featured Image Card with Text Overlay */}
               <a href="/blog/featured" className="block group relative">
                 <div className="relative w-full h-48 overflow-hidden">
-                  <img 
-                    src="https://images.unsplash.com/photo-1605152276897-4f618f831968?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&h=628&q=80" 
+                  <img
+                    src="https://images.unsplash.com/photo-1605152276897-4f618f831968?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&h=628&q=80"
                     alt="Featured Blog Post"
                     width={1200}
                     height={628}
@@ -276,17 +277,17 @@ const BlogSection: React.FC = () => {
                   </div>
                 </div>
               </a>
-              
+
               <div className="p-6">
                 <h4 className="text-lg font-semibold text-gray-800 mb-4">Recent Posts</h4>
-                
+
                 <div className="space-y-4 mb-6">
                   {featuredPosts.slice(0, 3).map((post) => (
                     <div key={`recent-${post.id}`} className="flex gap-3 items-start pb-3 border-b border-gray-100">
                       {/* Thumbnail */}
                       <div className="flex-shrink-0 w-16 h-16 rounded overflow-hidden relative">
-                        <img 
-                          src={post.thumbnail} 
+                        <img
+                          src={post.thumbnail}
                           alt={post.title}
                           width={150}
                           height={150}
@@ -304,13 +305,13 @@ const BlogSection: React.FC = () => {
                     </div>
                   ))}
                 </div>
-                
+
                 {/* Last Updated Section */}
                 <div className="flex items-center justify-between text-xs text-gray-500 border-t border-gray-100 pt-4">
                   <div className="flex items-center gap-1">
                     <Clock size={12} className="text-[#F1B434]" />
-                    <span>Last updated: {new Date().toLocaleDateString('en-US', { 
-                      month: 'short', 
+                    <span>Last updated: {new Date().toLocaleDateString('en-US', {
+                      month: 'short',
                       day: 'numeric',
                       hour: '2-digit',
                       minute: '2-digit'
@@ -327,20 +328,21 @@ const BlogSection: React.FC = () => {
         </div>
 
         {/* View All Button */}
-        <motion.div 
+        <motion.div
           className="text-center mt-12"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
           viewport={{ once: true }}
         >
-         <motion.a
-        href={`${basePath}/media/blog`}
-        className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-[#F1B434] to-[#FFE352] text-white rounded-lg font-semibold shadow-md hover:shadow-lg transition-all"
-        whileHover={{ scale: 1.05 }}
-      >
-        View All Articles
-      </motion.a>
+          <Link
+            href={`${basePath}/media/blog`}
+            className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-[#F1B434] to-[#FFE352] text-white rounded-lg font-semibold shadow-md hover:shadow-lg transition-all"
+          >
+            <motion.span whileHover={{ scale: 1.05 }}>
+              View All Articles
+            </motion.span>
+          </Link>
 
         </motion.div>
       </div>
