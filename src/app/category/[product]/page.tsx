@@ -2,8 +2,14 @@
 import React, { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import { useState } from 'react';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
+import GetQuoteModal from '../../../components/GetQuote';
+import BrochureDownloadModal from '../../../components/BrochureDownload';
 import { motion } from 'framer-motion';
+const slugify = (text: string) =>
+  text.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
+
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
@@ -138,18 +144,18 @@ const allProducts = [
 
 const subProducts = {
   'rough-terrain-cranes': [
-    { name: 'HUSKY 620', image: `${basePath}/husky-620.jpg`, link: 'https://www.tilindia.in/category/rough-terrain-cranes/husky-620' },
-    { name: 'RT 630C', image: `${basePath}/rt630c.jpg`, link: 'https://www.tilindia.in/category/rough-terrain-cranes/rt-630c' },
-    { name: 'RT 740B', image: `${basePath}/rt740b.jpg`, link: 'https://www.tilindia.in/category/rough-terrain-cranes/rt-740b' },
-    { name: 'RT 760', image: `${basePath}/rt760.jpg`, link: 'https://www.tilindia.in/category/rough-terrain-cranes/rt-760' },
-    { name: 'RT 880', image: `${basePath}/rt880.png`, link: 'https://www.tilindia.in/category/rough-terrain-cranes/rt-880' }
+    { name: 'HUSKY 620', image: `${basePath}/husky-620.jpg` },
+    { name: 'RT 630C', image: `${basePath}/rt630c.jpg`  },
+    { name: 'RT 740B', image: `${basePath}/rt740b.jpg`},
+    { name: 'RT 760', image: `${basePath}/rt760.jpg` },
+    { name: 'RT 880', image: `${basePath}/rt880.png` }
   ],
   'truck-cranes': [
-    { name: 'HYDRA 830M', image: `${basePath}/hydra830m.jpg`, link: 'https://www.tilindia.in/category/truck-cranes/hydra-830m' },
-    { name: 'TMS 750B MK II', image: `${basePath}/tms750b.jpg`, link: 'https://www.tilindia.in/category/truck-cranes/tms-750b-mk-ii' },
-    { name: 'TMS 830', image: `${basePath}/tms830.jpg`, link: 'https://www.tilindia.in/category/truck-cranes/tms-830' },
-    { name: 'TMS 845', image: `${basePath}/tms845.jpg`, link: 'https://www.tilindia.in/category/truck-cranes/tms-845' },
-    { name: 'TMS 850', image: `${basePath}/tms850.jpg`, link: 'https://www.tilindia.in/category/truck-cranes/tms-850' }
+    { name: 'HYDRA 830M', image: `${basePath}/hydra830m.jpg` },
+    { name: 'TMS 750B MK II', image: `${basePath}/tms750b.jpg` },
+    { name: 'TMS 830', image: `${basePath}/tms830.jpg`},
+    { name: 'TMS 845', image: `${basePath}/tms845.jpg` },
+    { name: 'TMS 850', image: `${basePath}/tms850.jpg` }
   ],
   // Add other categories with their sub-products similarly
 };
@@ -253,7 +259,9 @@ function ProductSkeleton() {
 
 function ProductContent({ params }: { params: { product: string } }) {
   const product = allProducts.find(p => p.id === params.product);
-  
+  const [isBrochureModalOpen, setIsBrochureModalOpen] = useState(false);
+  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+
   if (!product) {
     return notFound();
   }
@@ -340,8 +348,8 @@ function ProductContent({ params }: { params: { product: string } }) {
               <h2 className="text-xl font-bold text-gray-800 mb-4">Key Features</h2>
               <ul className="space-y-3">
                 {product.features.map((feature, index) => (
-                  <motion.li 
-                    key={index} 
+                  <motion.li
+                    key={index}
                     className="flex items-start"
                     initial={{ opacity: 0, x: 10 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -363,8 +371,8 @@ function ProductContent({ params }: { params: { product: string } }) {
               <div className="bg-gray-50 rounded-lg p-6">
                 <ul className="space-y-3">
                   {product.specifications.map((spec, index) => (
-                    <motion.li 
-                      key={index} 
+                    <motion.li
+                      key={index}
                       className="flex justify-between border-b border-gray-100 pb-2"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -379,14 +387,16 @@ function ProductContent({ params }: { params: { product: string } }) {
             </div>
 
             <div className="flex flex-wrap gap-4">
-              <Link
-                href={product.brochure}
+              <button
+                onClick={() => setIsBrochureModalOpen(true)}
                 className="px-6 py-3 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm flex items-center"
-                target="_blank"
               >
                 Download Brochure
-              </Link>
-              <button className="px-6 py-3 bg-[#F1B434] text-white font-medium rounded-lg hover:bg-[#d89c2a] transition-colors shadow-md">
+              </button>
+              <button
+                onClick={() => setIsQuoteModalOpen(true)}
+                className="px-6 py-3 bg-[#F1B434] text-white font-medium rounded-lg hover:bg-[#d89c2a] transition-colors shadow-md"
+              >
                 Request Quote
               </button>
             </div>
@@ -419,7 +429,7 @@ function ProductContent({ params }: { params: { product: string } }) {
                       {subProduct.name}
                     </h3>
                     <div className="flex items-center text-sm text-[#F1B434] font-medium">
-                      <Link href={subProduct.link} target="_blank">
+                      <Link href={`/category/${params.product}/${slugify(subProduct.name)}`}>
                         <span>View Product</span>
                         <ChevronRight className="w-4 h-4 ml-1" />
                       </Link>
@@ -446,7 +456,10 @@ function ProductContent({ params }: { params: { product: string } }) {
               Our product specialists are ready to help you with specifications, pricing, and any other questions.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <button className="px-6 py-3 bg-[#F1B434] text-white font-medium rounded-lg hover:bg-[#d89c2a] transition-colors shadow-md">
+              <button
+                onClick={() => setIsQuoteModalOpen(true)}
+                className="px-6 py-3 bg-[#F1B434] text-white font-medium rounded-lg hover:bg-[#d89c2a] transition-colors shadow-md"
+              >
                 Contact Our Experts
               </button>
               <button className="px-6 py-3 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm">
@@ -455,8 +468,17 @@ function ProductContent({ params }: { params: { product: string } }) {
             </div>
           </div>
         </motion.div>
+        <BrochureDownloadModal
+          isOpen={isBrochureModalOpen}
+          onClose={() => setIsBrochureModalOpen(false)}
+        />
+        <GetQuoteModal
+          isOpen={isQuoteModalOpen}
+          onClose={() => setIsQuoteModalOpen(false)}
+        />
       </main>
     </div>
+
   );
 }
 

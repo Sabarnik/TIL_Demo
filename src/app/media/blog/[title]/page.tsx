@@ -14,7 +14,10 @@ import {
   ArrowLeft,
   User,
   BookOpen,
-  ArrowRight
+  ArrowRight,
+  Search,
+  TrendingUp,
+  Clock as ClockIcon
 } from 'lucide-react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
@@ -30,7 +33,7 @@ const SkeletonLoader = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10" />
 
         <div className="absolute inset-0 z-20 flex items-center pt-6">
-          <div className="max-w-4xl mx-auto px-6 md:px-10 w-full">
+          <div className="max-w-6xl mx-auto px-6 md:px-10 w-full">
             <div className="mb-4">
               <div className="h-6 w-24 bg-gray-400 rounded-md animate-pulse"></div>
             </div>
@@ -49,98 +52,134 @@ const SkeletonLoader = () => {
         </div>
       </div>
 
-      <main className="max-w-4xl mx-auto px-6 md:px-10 py-12 -mt-6 relative z-10">
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-          {/* Article Content Skeleton */}
-          <div className="p-8">
-            <div className="flex flex-wrap gap-2 mb-6">
-              <div className="h-8 w-20 bg-gray-300 rounded-full animate-pulse"></div>
-              <div className="h-8 w-24 bg-gray-300 rounded-full animate-pulse"></div>
-              <div className="h-8 w-28 bg-gray-300 rounded-full animate-pulse"></div>
-            </div>
+      <main className="max-w-6xl mx-auto px-6 md:px-10 py-12 -mt-6 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <div className="lg:col-span-3">
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+              {/* Article Content Skeleton */}
+              <div className="p-8">
+                <div className="flex flex-wrap gap-2 mb-6">
+                  <div className="h-8 w-20 bg-gray-300 rounded-full animate-pulse"></div>
+                  <div className="h-8 w-24 bg-gray-300 rounded-full animate-pulse"></div>
+                  <div className="h-8 w-28 bg-gray-300 rounded-full animate-pulse"></div>
+                </div>
 
-            <div className="h-6 w-full bg-gray-300 rounded-md animate-pulse mb-4"></div>
-            <div className="h-6 w-3/4 bg-gray-300 rounded-md animate-pulse mb-8"></div>
+                <div className="h-6 w-full bg-gray-300 rounded-md animate-pulse mb-4"></div>
+                <div className="h-6 w-3/4 bg-gray-300 rounded-md animate-pulse mb-8"></div>
 
-            <div className="h-6 w-64 bg-gray-300 rounded-md animate-pulse mb-4"></div>
-            <div className="h-4 w-full bg-gray-300 rounded-md animate-pulse mb-4"></div>
-            <div className="h-4 w-full bg-gray-300 rounded-md animate-pulse mb-4"></div>
-            <div className="h-4 w-3/4 bg-gray-300 rounded-md animate-pulse mb-8"></div>
+                <div className="h-6 w-64 bg-gray-300 rounded-md animate-pulse mb-4"></div>
+                <div className="h-4 w-full bg-gray-300 rounded-md animate-pulse mb-4"></div>
+                <div className="h-4 w-full bg-gray-300 rounded-md animate-pulse mb-4"></div>
+                <div className="h-4 w-3/4 bg-gray-300 rounded-md animate-pulse mb-8"></div>
 
-            <div className="h-40 w-full bg-gray-300 rounded-lg animate-pulse mb-4"></div>
+                <div className="h-40 w-full bg-gray-300 rounded-lg animate-pulse mb-4"></div>
 
-            <div className="h-6 w-64 bg-gray-300 rounded-md animate-pulse mb-4"></div>
-            <div className="h-4 w-full bg-gray-300 rounded-md animate-pulse mb-4"></div>
-            <div className="h-4 w-full bg-gray-300 rounded-md animate-pulse mb-4"></div>
-            <div className="h-4 w-3/4 bg-gray-300 rounded-md animate-pulse"></div>
-          </div>
-
-          {/* Action Bar Skeleton */}
-          <div className="border-t border-gray-200 p-6 flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="h-6 w-16 bg-gray-300 rounded-md animate-pulse"></div>
-              <div className="h-6 w-16 bg-gray-300 rounded-md animate-pulse"></div>
-              <div className="h-6 w-16 bg-gray-300 rounded-md animate-pulse"></div>
-            </div>
-
-            <div className="h-6 w-32 bg-gray-300 rounded-md animate-pulse"></div>
-          </div>
-
-          {/* Author Bio Skeleton */}
-          <div className="border-t border-gray-200 p-6 bg-gray-50">
-            <div className="flex items-start gap-4">
-              <div className="w-16 h-16 bg-gray-300 rounded-full animate-pulse"></div>
-              <div className="flex-1">
-                <div className="h-6 w-40 bg-gray-300 rounded-md animate-pulse mb-2"></div>
-                <div className="h-4 w-32 bg-gray-300 rounded-md animate-pulse mb-4"></div>
-                <div className="h-4 w-full bg-gray-300 rounded-md animate-pulse mb-2"></div>
+                <div className="h-6 w-64 bg-gray-300 rounded-md animate-pulse mb-4"></div>
+                <div className="h-4 w-full bg-gray-300 rounded-md animate-pulse mb-4"></div>
+                <div className="h-4 w-full bg-gray-300 rounded-md animate-pulse mb-4"></div>
                 <div className="h-4 w-3/4 bg-gray-300 rounded-md animate-pulse"></div>
               </div>
-            </div>
-          </div>
 
-          {/* Comments Section Skeleton */}
-          <div className="border-t border-gray-200 p-6">
-            <div className="h-6 w-40 bg-gray-300 rounded-md animate-pulse mb-6"></div>
+              {/* Action Bar Skeleton */}
+              <div className="border-t border-gray-200 p-6 flex flex-wrap items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="h-6 w-16 bg-gray-300 rounded-md animate-pulse"></div>
+                  <div className="h-6 w-16 bg-gray-300 rounded-md animate-pulse"></div>
+                  <div className="h-6 w-16 bg-gray-300 rounded-md animate-pulse"></div>
+                </div>
 
-            <div className="flex gap-4 mb-8">
-              <div className="w-10 h-10 bg-gray-300 rounded-full animate-pulse"></div>
-              <div className="flex-1">
-                <div className="h-20 w-full bg-gray-300 rounded-md animate-pulse mb-2"></div>
-                <div className="h-10 w-32 bg-gray-300 rounded-md animate-pulse ml-auto"></div>
+                <div className="h-6 w-32 bg-gray-300 rounded-md animate-pulse"></div>
+              </div>
+
+              {/* Author Bio Skeleton */}
+              <div className="border-t border-gray-200 p-6 bg-gray-50">
+                <div className="flex items-start gap-4">
+                  <div className="w-16 h-16 bg-gray-300 rounded-full animate-pulse"></div>
+                  <div className="flex-1">
+                    <div className="h-6 w-40 bg-gray-300 rounded-md animate-pulse mb-2"></div>
+                    <div className="h-4 w-32 bg-gray-300 rounded-md animate-pulse mb-4"></div>
+                    <div className="h-4 w-full bg-gray-300 rounded-md animate-pulse mb-2"></div>
+                    <div className="h-4 w-3/4 bg-gray-300 rounded-md animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Comments Section Skeleton */}
+              <div className="border-t border-gray-200 p-6">
+                <div className="h-6 w-40 bg-gray-300 rounded-md animate-pulse mb-6"></div>
+
+                <div className="flex gap-4 mb-8">
+                  <div className="w-10 h-10 bg-gray-300 rounded-full animate-pulse"></div>
+                  <div className="flex-1">
+                    <div className="h-20 w-full bg-gray-300 rounded-md animate-pulse mb-2"></div>
+                    <div className="h-10 w-32 bg-gray-300 rounded-md animate-pulse ml-auto"></div>
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  {[1, 2].map(item => (
+                    <div key={item} className="flex gap-4">
+                      <div className="w-10 h-10 bg-gray-300 rounded-full animate-pulse"></div>
+                      <div className="flex-1">
+                        <div className="h-4 w-40 bg-gray-300 rounded-md animate-pulse mb-2"></div>
+                        <div className="h-4 w-full bg-gray-300 rounded-md animate-pulse mb-2"></div>
+                        <div className="h-4 w-3/4 bg-gray-300 rounded-md animate-pulse mb-2"></div>
+                        <div className="h-4 w-20 bg-gray-300 rounded-md animate-pulse"></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
-            <div className="space-y-6">
-              {[1, 2].map(item => (
-                <div key={item} className="flex gap-4">
-                  <div className="w-10 h-10 bg-gray-300 rounded-full animate-pulse"></div>
+            {/* Related Posts Skeleton */}
+            <div className="mt-12">
+              <div className="h-6 w-56 bg-gray-300 rounded-md animate-pulse mb-6"></div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {[1, 2, 3].map(item => (
+                  <div key={item} className="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div className="h-40 bg-gray-300 animate-pulse"></div>
+                    <div className="p-4">
+                      <div className="h-4 w-20 bg-gray-300 rounded-md animate-pulse mb-2"></div>
+                      <div className="h-6 w-full bg-gray-300 rounded-md animate-pulse mb-4"></div>
+                      <div className="h-4 w-32 bg-gray-300 rounded-md animate-pulse"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column Skeleton */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+              <div className="h-6 w-40 bg-gray-300 rounded-md animate-pulse mb-4"></div>
+              <div className="h-10 w-full bg-gray-300 rounded-md animate-pulse mb-3"></div>
+              <div className="h-6 w-24 bg-gray-300 rounded-md animate-pulse"></div>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+              <div className="h-6 w-40 bg-gray-300 rounded-md animate-pulse mb-6"></div>
+              {[1, 2, 3, 4].map(item => (
+                <div key={item} className="flex gap-3 mb-4">
+                  <div className="w-16 h-16 bg-gray-300 rounded-md animate-pulse"></div>
                   <div className="flex-1">
-                    <div className="h-4 w-40 bg-gray-300 rounded-md animate-pulse mb-2"></div>
                     <div className="h-4 w-full bg-gray-300 rounded-md animate-pulse mb-2"></div>
-                    <div className="h-4 w-3/4 bg-gray-300 rounded-md animate-pulse mb-2"></div>
-                    <div className="h-4 w-20 bg-gray-300 rounded-md animate-pulse"></div>
+                    <div className="h-3 w-20 bg-gray-300 rounded-md animate-pulse"></div>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
-        </div>
 
-        {/* Related Posts Skeleton */}
-        <div className="mt-12">
-          <div className="h-6 w-56 bg-gray-300 rounded-md animate-pulse mb-6"></div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[1, 2, 3].map(item => (
-              <div key={item} className="bg-white rounded-lg shadow-md overflow-hidden">
-                <div className="h-40 bg-gray-300 animate-pulse"></div>
-                <div className="p-4">
-                  <div className="h-4 w-20 bg-gray-300 rounded-md animate-pulse mb-2"></div>
-                  <div className="h-6 w-full bg-gray-300 rounded-md animate-pulse mb-4"></div>
-                  <div className="h-4 w-32 bg-gray-300 rounded-md animate-pulse"></div>
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <div className="h-6 w-40 bg-gray-300 rounded-md animate-pulse mb-6"></div>
+              {[1, 2, 3].map(item => (
+                <div key={item} className="mb-4">
+                  <div className="h-4 w-full bg-gray-300 rounded-md animate-pulse mb-2"></div>
+                  <div className="h-3 w-20 bg-gray-300 rounded-md animate-pulse"></div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </main>
@@ -161,6 +200,7 @@ const BlogViewPage: React.FC = () => {
   const [showShareOptions, setShowShareOptions] = useState(false);
   const [relatedPosts, setRelatedPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Sample blog posts data
   const featuredPosts = [
@@ -231,7 +271,7 @@ const BlogViewPage: React.FC = () => {
         <p>Look for these operator-focused features during your evaluation:</p>
         <ul class="list-disc pl-5 my-4">
           <li class="mb-2"><strong>Ergonomic cabin design:</strong> Adjustable seating, intuitive control placement, and adequate space</li>
-          <li class="mb-2"><strong>Climate control systems:</strong> Effective heating, ventilation, and air conditioning for all weather conditions</li>
+          <li class="mb-2"><strong>Climate control systems:</strong> Effective heating, ventilation and air conditioning for all weather conditions</li>
           <li class="mb-2"><strong>Visibility enhancements:</strong> 360-degree camera systems, additional mirrors, and window configurations</li>
           <li class="mb-2"><strong>Advanced stability control:</strong> Systems that prevent tipping and enhance safety during operations</li>
           <li><strong>Intuitive control interfaces:</strong> User-friendly displays and control systems that reduce operator fatigue</li>
@@ -279,11 +319,40 @@ const BlogViewPage: React.FC = () => {
       id: 2,
       title: '6 Powerful Cranes Revolutionizing Modern Construction Projects',
       excerpt: 'Modern construction sites rely on specialized crane technology to achieve unprecedented efficiency and capability. These six crane types represent the cutting edge of construction equipment innovation.',
-      content: `Full content for "6 Powerful Cranes Revolutionizing Modern Construction Projects"...`,
+      content: `
+        <h2>Introduction</h2>
+        <p>The construction industry has witnessed remarkable technological advancements in recent years, with crane technology leading the charge in innovation. From towering skyscrapers to complex infrastructure projects, modern cranes have become indispensable tools that enable construction companies to tackle increasingly ambitious projects with precision and efficiency.</p>
+        
+        <h2>1. Tower Cranes: The Skyline Giants</h2>
+        <p>Tower cranes remain the most recognizable feature of urban construction sites, capable of lifting heavy materials to impressive heights with remarkable precision. Modern tower cranes incorporate advanced safety systems, remote operation capabilities, and sophisticated load monitoring technology.</p>
+        
+        <div class="bg-gray-100 p-6 rounded-lg border-l-4 border-[#F1B434] my-6">
+          <h3 class="text-xl font-bold text-gray-800 mb-2">Did You Know?</h3>
+          <p class="text-gray-700">The world's tallest tower crane can reach heights of over 265 meters (869 feet) and lift loads up to 64 metric tons. These engineering marvels can often assemble themselves through a process called "climbing."</p>
+        </div>
+        
+        <h2>2. Mobile Cranes: Versatility on Wheels</h2>
+        <p>Mobile cranes offer unparalleled flexibility, combining lifting power with mobility. These self-propelled machines can quickly move between job sites and handle a wide variety of lifting tasks. Modern mobile cranes feature advanced outrigger systems, telescopic booms, and computerized load management.</p>
+        
+        <h2>3. Crawler Cranes: Stability on Challenging Terrain</h2>
+        <p>With their tracked undercarriages, crawler cranes provide exceptional stability and mobility on rough or soft terrain. These heavy-lift specialists excel in infrastructure projects, power plant construction, and heavy industrial applications where ground conditions would challenge other crane types.</p>
+        
+        <h2>4. Overhead Cranes: Precision in Controlled Environments</h2>
+        <p>Overhead cranes, also known as bridge cranes, operate on elevated runways to provide precise material handling in manufacturing facilities, warehouses, and industrial plants. Modern versions incorporate automation, precision positioning systems, and advanced control interfaces.</p>
+        
+        <h2>5. Rough-Terrain Cranes: Off-Road Capability</h2>
+        <p>Designed specifically for off-road and rough terrain applications, these cranes feature robust four-wheel drive systems, large flotation tires, and enhanced ground clearance. They're indispensable for construction projects in remote or undeveloped areas.</p>
+        
+        <h2>6. Floating Cranes: Marine Construction Specialists</h2>
+        <p>Floating cranes mounted on barges or specialized vessels handle heavy lifting tasks in marine environments, including port construction, bridge building, and offshore projects. These massive machines can lift thousands of tons and represent some of the most impressive engineering in the crane world.</p>
+        
+        <h2>Conclusion</h2>
+        <p>The evolution of crane technology continues to push the boundaries of what's possible in construction. From smart cranes with IoT connectivity to hybrid power systems that reduce environmental impact, the future of crane technology promises even greater efficiency, safety, and capability.</p>
+      `,
       author: {
         name: 'Priya Sharma',
         role: 'Senior Construction Equipment Specialist',
-        bio: 'Head of Equipment Innovation at TIL with a focus on construction technology and sustainable building practices.',
+        bio: 'Head of Equipment Innovation at TIL with a focus on construction technology and sustainable building practices. Priya has over 12 years of experience in construction equipment consulting and has worked on major infrastructure projects across India and Southeast Asia.',
         avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&h=200&q=80'
       },
       column: 'Construction Technology',
@@ -295,6 +364,69 @@ const BlogViewPage: React.FC = () => {
       thumbnail: `${basePath}/blog2.jpg`,
       featuredImage: `${basePath}/blog2.jpg`,
       tags: ['Cranes', 'Construction', 'Heavy Equipment', 'Building Technology']
+    },
+    {
+      id: 3,
+      title: 'The Future of Electric Heavy Machinery: Trends and Predictions',
+      excerpt: 'As sustainability becomes increasingly important, the heavy machinery industry is rapidly transitioning toward electric power. This shift represents both a challenge and an opportunity for construction and logistics companies.',
+      content: `Full content for electric machinery article...`,
+      author: {
+        name: 'Arjun Patel',
+        role: 'Sustainable Technology Analyst',
+        bio: 'Leading researcher in electric heavy machinery with publications in multiple industry journals.',
+        avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&h=200&q=80'
+      },
+      column: 'Sustainable Technology',
+      date: '2024-06-15',
+      readTime: '10 min',
+      likes: '2,450',
+      comments: '89',
+      image: `${basePath}/blog3.jpg`,
+      thumbnail: `${basePath}/blog3.jpg`,
+      featuredImage: `${basePath}/blog3.jpg`,
+      tags: ['Electric Vehicles', 'Sustainability', 'Heavy Machinery', 'Innovation']
+    },
+    {
+      id: 4,
+      title: 'Maintenance Best Practices for Extending Equipment Lifespan',
+      excerpt: 'Proper maintenance isn\'t just about fixing problems—it\'s about preventing them. Implementing these best practices can significantly extend the operational life of your heavy equipment while reducing downtime and repair costs.',
+      content: `Full content for maintenance article...`,
+      author: {
+        name: 'Michael Chen',
+        role: 'Equipment Maintenance Director',
+        bio: '20+ years of experience in heavy equipment maintenance and reliability engineering.',
+        avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&h=200&q=80'
+      },
+      column: 'Equipment Management',
+      date: '2024-03-12',
+      readTime: '14 min',
+      likes: '4,120',
+      comments: '203',
+      image: `${basePath}/blog4.jpg`,
+      thumbnail: `${basePath}/blog4.jpg`,
+      featuredImage: `${basePath}/blog4.jpg`,
+      tags: ['Maintenance', 'Equipment Management', 'Best Practices', 'Operations']
+    },
+    {
+      id: 5,
+      title: 'Automation in Logistics: How Smart Equipment is Transforming Ports',
+      excerpt: 'From autonomous cranes to AI-powered logistics systems, automation is revolutionizing port operations worldwide. This transformation is increasing efficiency, improving safety, and reshaping the global supply chain.',
+      content: `Full content for automation article...`,
+      author: {
+        name: 'Lisa Wang',
+        role: 'Port Technology Specialist',
+        bio: 'Expert in port automation systems with implementation experience across three continents.',
+        avatar: 'https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&h=200&q=80'
+      },
+      column: 'Logistics Innovation',
+      date: '2024-07-08',
+      readTime: '18 min',
+      likes: '5,340',
+      comments: '312',
+      image: `${basePath}/blog5.jpg`,
+      thumbnail: `${basePath}/blog5.jpg`,
+      featuredImage: `${basePath}/blog5.jpg`,
+      tags: ['Automation', 'Logistics', 'Port Technology', 'AI']
     }
   ];
 
@@ -325,6 +457,18 @@ const BlogViewPage: React.FC = () => {
       likes: 15
     }
   ];
+
+  // Popular posts for right column
+  const popularPosts = featuredPosts
+    .filter(p => p.id !== 1) // Exclude current post
+    .sort((a, b) => parseInt(b.likes.replace(/,/g, '')) - parseInt(a.likes.replace(/,/g, '')))
+    .slice(0, 4);
+
+  // Recent posts for right column
+  const recentPosts = featuredPosts
+    .filter(p => p.id !== 1) // Exclude current post
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    .slice(0, 3);
 
   useEffect(() => {
     // Simulate loading delay
@@ -473,7 +617,14 @@ const BlogViewPage: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/60 to-transparent z-20" />
 
         <div className="absolute inset-0 z-20 flex items-center pt-6">
-          <div className="max-w-4xl mx-auto px-6 md:px-10 w-full">
+          <div className="max-w-6xl mx-auto px-6 md:px-10 w-full">
+            <button
+              onClick={() => router.push(`${basePath}/media/blog`)}
+              className="flex items-center text-white/80 hover:text-white mb-4 transition-colors"
+            >
+              <ArrowLeft size={16} className="mr-2" />
+              Back to Blog
+            </button>
 
             <motion.span
               className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#F1B434] to-[#FFE352] text-sm font-bold tracking-tight mb-2"
@@ -524,234 +675,335 @@ const BlogViewPage: React.FC = () => {
         </div>
       </div>
 
-      <main className="max-w-4xl mx-auto px-6 md:px-10 py-12 -mt-6 relative z-10">
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-          {/* Article Content */}
-          <article className="prose prose-lg max-w-none p-8">
-            <div className="flex flex-wrap gap-2 mb-6">
-              {post.tags.map((tag: string, index: number) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 bg-[#F1B434]/10 text-[#F1B434] rounded-full text-sm"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+      <main className="max-w-6xl mx-auto px-6 md:px-10 py-12 -mt-6 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Main Content */}
+          <div className="lg:col-span-3">
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+              {/* Article Content */}
+              <article className="prose prose-lg max-w-none p-8">
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {post.tags.map((tag: string, index: number) => (
+                    <span
+                      key={index}
+                      className="px-3 py-1 bg-[#F1B434]/10 text-[#F1B434] rounded-full text-sm"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
 
-            <p className="lead text-gray-700 text-xl mb-8 font-medium">
-              {post.excerpt}
-            </p>
+                <p className="lead text-gray-700 text-xl mb-8 font-medium">
+                  {post.excerpt}
+                </p>
 
-            <div dangerouslySetInnerHTML={{ __html: post.content }} />
-          </article>
+                <div dangerouslySetInnerHTML={{ __html: post.content }} />
+              </article>
 
-          {/* Action Bar */}
-          <div className="border-t border-gray-200 p-6 flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <motion.button
-                whileTap={{ scale: 0.95 }}
-                onClick={handleLike}
-                className="flex items-center gap-2 text-gray-600 hover:text-[#F1B434] transition-colors"
-              >
-                <Heart
-                  size={20}
-                  fill={isLiked ? "#F1B434" : "none"}
-                  className={isLiked ? "text-[#F1B434]" : ""}
-                />
-                <span>{likes.toLocaleString()}</span>
-              </motion.button>
+              {/* Action Bar */}
+              <div className="border-t border-gray-200 p-6 flex flex-wrap items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <motion.button
+                    whileTap={{ scale: 0.95 }}
+                    onClick={handleLike}
+                    className="flex items-center gap-2 text-gray-600 hover:text-[#F1B434] transition-colors"
+                  >
+                    <Heart
+                      size={20}
+                      fill={isLiked ? "#F1B434" : "none"}
+                      className={isLiked ? "text-[#F1B434]" : ""}
+                    />
+                    <span>{likes.toLocaleString()}</span>
+                  </motion.button>
 
-              <button className="flex items-center gap-2 text-gray-600 hover:text-[#F1B434] transition-colors">
-                <MessageCircle size={20} />
-                <span>{comments.length}</span>
-              </button>
+                  <button className="flex items-center gap-2 text-gray-600 hover:text-[#F1B434] transition-colors">
+                    <MessageCircle size={20} />
+                    <span>{comments.length}</span>
+                  </button>
 
-              <div className="relative">
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowShareOptions(!showShareOptions)}
+                      className="flex items-center gap-2 text-gray-600 hover:text-[#F1B434] transition-colors"
+                    >
+                      <Share2 size={20} />
+                      <span>Share</span>
+                    </button>
+
+                    {showShareOptions && (
+                      <motion.div
+                        className="absolute bottom-full left-0 mb-2 w-48 bg-white rounded-md shadow-lg py-2 z-10 border border-gray-200"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                      >
+                        <button
+                          onClick={() => handleShare('facebook')}
+                          className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          <Facebook size={16} className="mr-2 text-blue-600" />
+                          Share on Facebook
+                        </button>
+                        <button
+                          onClick={() => handleShare('twitter')}
+                          className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          <Twitter size={16} className="mr-2 text-blue-400" />
+                          Share on Twitter
+                        </button>
+                        <button
+                          onClick={() => handleShare('linkedin')}
+                          className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          <Linkedin size={16} className="mr-2 text-blue-700" />
+                          Share on LinkedIn
+                        </button>
+                        <button
+                          onClick={() => handleShare('copy')}
+                          className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          <LinkIcon size={16} className="mr-2" />
+                          Copy Link
+                        </button>
+                      </motion.div>
+                    )}
+                  </div>
+                </div>
+
                 <button
-                  onClick={() => setShowShareOptions(!showShareOptions)}
+                  onClick={toggleSavePost}
                   className="flex items-center gap-2 text-gray-600 hover:text-[#F1B434] transition-colors"
                 >
-                  <Share2 size={20} />
-                  <span>Share</span>
-                </button>
-
-                {showShareOptions && (
-                  <motion.div
-                    className="absolute bottom-full left-0 mb-2 w-48 bg-white rounded-md shadow-lg py-2 z-10 border border-gray-200"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                  >
-                    <button
-                      onClick={() => handleShare('facebook')}
-                      className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      <Facebook size={16} className="mr-2 text-blue-600" />
-                      Share on Facebook
-                    </button>
-                    <button
-                      onClick={() => handleShare('twitter')}
-                      className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      <Twitter size={16} className="mr-2 text-blue-400" />
-                      Share on Twitter
-                    </button>
-                    <button
-                      onClick={() => handleShare('linkedin')}
-                      className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      <Linkedin size={16} className="mr-2 text-blue-700" />
-                      Share on LinkedIn
-                    </button>
-                    <button
-                      onClick={() => handleShare('copy')}
-                      className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      <LinkIcon size={16} className="mr-2" />
-                      Copy Link
-                    </button>
-                  </motion.div>
-                )}
-              </div>
-            </div>
-
-            <button
-              onClick={toggleSavePost}
-              className="flex items-center gap-2 text-gray-600 hover:text-[#F1B434] transition-colors"
-            >
-              <Heart
-                size={20}
-                fill={savedPosts.includes(post.id) ? "#F1B434" : "none"}
-                className={savedPosts.includes(post.id) ? "text-[#F1B434]" : ""}
-              />
-              <span>{savedPosts.includes(post.id) ? 'Saved' : 'Save for later'}</span>
-            </button>
-          </div>
-
-          {/* Author Bio */}
-          <div className="border-t border-gray-200 p-6 bg-gray-50">
-            <div className="flex items-start gap-4">
-              <img
-                src={post.author.avatar}
-                alt={post.author.name}
-                className="w-16 h-16 rounded-full object-cover"
-              />
-              <div>
-                <h3 className="text-lg font-bold text-gray-800">{post.author.name}</h3>
-                <p className="text-sm text-[#F1B434]">{post.author.role}</p>
-                <p className="text-gray-600 mt-2">{post.author.bio}</p>
-                <div className="flex items-center gap-2 mt-3">
-                  <button className="text-sm text-[#F1B434] hover:underline flex items-center">
-                    <User size={14} className="mr-1" />
-                    View Profile
-                  </button>
-                  <span className="text-gray-400">•</span>
-                  <button className="text-sm text-[#F1B434] hover:underline">
-                    More Articles
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Comments Section */}
-          <div className="border-t border-gray-200 p-6">
-            <h3 className="text-xl font-bold text-gray-800 mb-6">Comments ({comments.length})</h3>
-
-            <form onSubmit={handleCommentSubmit} className="mb-8">
-              <div className="flex gap-4">
-                <div className="flex-shrink-0">
-                  <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-white font-bold">
-                    <User size={20} />
-                  </div>
-                </div>
-                <div className="flex-1">
-                  <textarea
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                    placeholder="Add a comment..."
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#F1B434] focus:border-[#F1B434]"
-                    rows={3}
+                  <Heart
+                    size={20}
+                    fill={savedPosts.includes(post.id) ? "#F1B434" : "none"}
+                    className={savedPosts.includes(post.id) ? "text-[#F1B434]" : ""}
                   />
-                  <div className="mt-2 flex justify-end">
-                    <button
-                      type="submit"
-                      className="px-4 py-2 bg-[#F1B434] text-white rounded-md hover:bg-[#d89c2a] transition-colors flex items-center"
-                    >
-                      Post Comment
-                      <ArrowRight size={16} className="ml-2" />
-                    </button>
+                  <span>{savedPosts.includes(post.id) ? 'Saved' : 'Save for later'}</span>
+                </button>
+              </div>
+
+              {/* Author Bio */}
+              <div className="border-t border-gray-200 p-6 bg-gray-50">
+                <div className="flex items-start gap-4">
+                  <img
+                    src={post.author.avatar}
+                    alt={post.author.name}
+                    className="w-16 h-16 rounded-full object-cover"
+                  />
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-800">{post.author.name}</h3>
+                    <p className="text-sm text-[#F1B434]">{post.author.role}</p>
+                    <p className="text-gray-600 mt-2">{post.author.bio}</p>
+                    <div className="flex items-center gap-2 mt-3">
+                      <button className="text-sm text-[#F1B434] hover:underline flex items-center">
+                        <User size={14} className="mr-1" />
+                        View Profile
+                      </button>
+                      <span className="text-gray-400">•</span>
+                      <button className="text-sm text-[#F1B434] hover:underline">
+                        More Articles
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </form>
 
-            <div className="space-y-6">
-              {comments.map(comment => (
-                <div key={comment.id} className="flex gap-4">
-                  <div className="flex-shrink-0">
-                    <img
-                      src={comment.avatar}
-                      alt={comment.author}
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h4 className="font-bold text-gray-800">{comment.author}</h4>
-                      <span className="text-sm text-gray-500">{formatDate(comment.date)}</span>
+              {/* Comments Section */}
+              <div className="border-t border-gray-200 p-6">
+                <h3 className="text-xl font-bold text-gray-800 mb-6">Comments ({comments.length})</h3>
+
+                <form onSubmit={handleCommentSubmit} className="mb-8">
+                  <div className="flex gap-4">
+                    <div className="flex-shrink-0">
+                      <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-white font-bold">
+                        <User size={20} />
+                      </div>
                     </div>
-                    <p className="text-gray-700 mb-2">{comment.content}</p>
-                    <div className="flex items-center gap-4">
-                      <button className="text-sm text-gray-500 hover:text-[#F1B434] flex items-center gap-1">
-                        <Heart size={14} />
-                        <span>{comment.likes}</span>
-                      </button>
-                      <button className="text-sm text-gray-500 hover:text-[#F1B434]">
-                        Reply
-                      </button>
+                    <div className="flex-1">
+                      <textarea
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        placeholder="Add a comment..."
+                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#F1B434] focus:border-[#F1B434]"
+                        rows={3}
+                      />
+                      <div className="mt-2 flex justify-end">
+                        <button
+                          type="submit"
+                          className="px-4 py-2 bg-[#F1B434] text-white rounded-md hover:bg-[#d89c2a] transition-colors flex items-center"
+                        >
+                          Post Comment
+                          <ArrowRight size={16} className="ml-2" />
+                        </button>
+                      </div>
                     </div>
                   </div>
+                </form>
+
+                <div className="space-y-6">
+                  {comments.map(comment => (
+                    <div key={comment.id} className="flex gap-4">
+                      <div className="flex-shrink-0">
+                        <img
+                          src={comment.avatar}
+                          alt={comment.author}
+                          className="w-10 h-10 rounded-full object-cover"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <h4 className="font-bold text-gray-800">{comment.author}</h4>
+                          <span className="text-sm text-gray-500">{formatDate(comment.date)}</span>
+                        </div>
+                        <p className="text-gray-700 mb-2">{comment.content}</p>
+                        <div className="flex items-center gap-4">
+                          <button className="text-sm text-gray-500 hover:text-[#F1B434] flex items-center gap-1">
+                            <Heart size={14} />
+                            <span>{comment.likes}</span>
+                          </button>
+                          <button className="text-sm text-gray-500 hover:text-[#F1B434]">
+                            Reply
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
+            </div>
+
+            {/* Related Posts */}
+            {relatedPosts.length > 0 && (
+              <div className="mt-12">
+                <h3 className="text-2xl font-bold text-gray-800 mb-6">Related Articles</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {relatedPosts.map(relatedPost => (
+                    <motion.div
+                      key={relatedPost.id}
+                      className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+                      whileHover={{ y: -5 }}
+                      onClick={() => router.push(`${basePath}/media/blog/${encodeURIComponent(relatedPost.title.replace(/\s+/g, '-').toLowerCase())}`)}
+                    >
+                      <div className="h-40 overflow-hidden">
+                        <img
+                          src={relatedPost.image}
+                          alt={relatedPost.title}
+                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                      <div className="p-4">
+                        <span className="text-xs font-medium text-[#F1B434]">{relatedPost.column}</span>
+                        <h4 className="font-bold text-gray-800 mt-1 mb-2 line-clamp-2">{relatedPost.title}</h4>
+                        <p className="text-sm text-gray-600 mb-3 line-clamp-2">{relatedPost.excerpt}</p>
+                        <div className="flex items-center text-xs text-gray-500">
+                          <span>{formatDate(relatedPost.date).split(',')[0]}</span>
+                          <span className="mx-2">•</span>
+                          <span>{relatedPost.readTime}</span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Right Column */}
+          <div className="lg:col-span-1">
+            {/* Search Box */}
+            <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+              <h3 className="text-lg font-bold text-gray-800 mb-4">Search Articles</h3>
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#F1B434] focus:border-[#F1B434]"
+                />
+                <Search size={18} className="absolute left-3 top-2.5 text-gray-400" />
+              </div>
+              <button className="mt-3 text-sm text-[#F1B434] hover:underline">
+                Advanced Search
+              </button>
+            </div>
+
+            {/* Popular Posts */}
+            <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+              <h3 className="text-lg font-bold text-gray-800 mb-6 flex items-center">
+                <TrendingUp size={20} className="mr-2 text-[#F1B434]" />
+                Popular Articles
+              </h3>
+              <div className="space-y-4">
+                {popularPosts.map(post => (
+                  <div 
+                    key={post.id} 
+                    className="flex gap-3 cursor-pointer group"
+                    onClick={() => router.push(`${basePath}/media/blog/${encodeURIComponent(post.title.replace(/\s+/g, '-').toLowerCase())}`)}
+                  >
+                    <div className="flex-shrink-0">
+                      <img
+                        src={post.thumbnail}
+                        alt={post.title}
+                        className="w-16 h-16 object-cover rounded-md group-hover:opacity-90 transition-opacity"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-medium text-gray-800 text-sm leading-tight group-hover:text-[#F1B434] transition-colors line-clamp-2">
+                        {post.title}
+                      </h4>
+                      <div className="flex items-center mt-1 text-xs text-gray-500">
+                        <ClockIcon size={12} className="mr-1" />
+                        <span>{post.readTime}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Recent Posts */}
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <h3 className="text-lg font-bold text-gray-800 mb-6 flex items-center">
+                <ClockIcon size={20} className="mr-2 text-[#F1B434]" />
+                Recent Articles
+              </h3>
+              <div className="space-y-3">
+                {recentPosts.map(post => (
+                  <div 
+                    key={post.id}
+                    className="cursor-pointer group"
+                    onClick={() => router.push(`${basePath}/media/blog/${encodeURIComponent(post.title.replace(/\s+/g, '-').toLowerCase())}`)}
+                  >
+                    <h4 className="font-medium text-gray-800 text-sm group-hover:text-[#F1B434] transition-colors line-clamp-2">
+                      {post.title}
+                    </h4>
+                    <div className="flex items-center mt-1 text-xs text-gray-500">
+                      <span>{formatDate(post.date).split(',')[0]}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Categories */}
+            <div className="bg-white rounded-xl shadow-lg p-6 mt-8">
+              <h3 className="text-lg font-bold text-gray-800 mb-4">Categories</h3>
+              <div className="space-y-2">
+                {['Industry Insights', 'Construction Technology', 'Sustainable Technology', 'Equipment Management', 'Logistics Innovation'].map(category => (
+                  <div key={category} className="flex justify-between items-center py-2 border-b border-gray-100 last:border-b-0">
+                    <span className="text-sm text-gray-700 hover:text-[#F1B434] cursor-pointer transition-colors">
+                      {category}
+                    </span>
+                    <span className="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded-full">
+                      {featuredPosts.filter(p => p.column === category).length}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-
-        {/* Related Posts */}
-        {relatedPosts.length > 0 && (
-          <div className="mt-12">
-            <h3 className="text-2xl font-bold text-gray-800 mb-6">Related Articles</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {relatedPosts.map(relatedPost => (
-                <motion.div
-                  key={relatedPost.id}
-                  className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
-                  whileHover={{ y: -5 }}
-                  onClick={() => router.push(`${basePath}/media/blog/${encodeURIComponent(relatedPost.title.replace(/\s+/g, '-').toLowerCase())}`)}
-                >
-                  <div className="h-40 overflow-hidden">
-                    <img
-                      src={relatedPost.image}
-                      alt={relatedPost.title}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <span className="text-xs font-medium text-[#F1B434]">{relatedPost.column}</span>
-                    <h4 className="font-bold text-gray-800 mt-1 mb-2 line-clamp-2">{relatedPost.title}</h4>
-                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">{relatedPost.excerpt}</p>
-                    <div className="flex items-center text-xs text-gray-500">
-                      <span>{formatDate(relatedPost.date).split(',')[0]}</span>
-                      <span className="mx-2">•</span>
-                      <span>{relatedPost.readTime}</span>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        )}
       </main>
     </div>
   );

@@ -2,13 +2,17 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, Clock, Heart, MessageCircle } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
 
 const BlogSection: React.FC = () => {
   const [savedPosts, setSavedPosts] = useState<number[]>([]);
-  const [expandedAuthor, setExpandedAuthor] = useState<number | null>(null);
-
+  const [expandedAuthor, setExpandedAuthor] = useState<number | null>(null); const router = useRouter();
+  const handlePostClick = (title: string) => {
+    const slug = title.replace(/\s+/g, "-").toLowerCase();
+    router.push(`${basePath}/media/blog/${slug}`);
+  };
   const featuredPosts = [
     {
       id: 1,
@@ -142,6 +146,7 @@ const BlogSection: React.FC = () => {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
                   viewport={{ once: true }}
+                  onClick={() => handlePostClick(post.title)}
                 >
                   <div className="flex gap-5">
                     {/* Content on the left */}
@@ -197,8 +202,6 @@ const BlogSection: React.FC = () => {
                       <h4 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-[#F1B434] transition-colors">
                         {post.title}
                       </h4>
-
-                      <p className="text-sm text-gray-600 mb-3">{post.excerpt}</p>
 
                       {/* Post Actions and Metadata */}
                       <div className="flex items-center justify-between">

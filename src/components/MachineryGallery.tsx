@@ -3,6 +3,7 @@
 import { type FC, useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
+import Link from "next/link";
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 
@@ -140,6 +141,7 @@ const ProductCard: FC<{ machine: Machine; isActive: boolean }> = ({
       </motion.span>
 
       {/* Always visible Explore Now button */}
+      <Link href={`${basePath}/category`} passHref>
       <motion.button
         className={`absolute flex items-center justify-center gap-1 text-white px-3 py-1.5 rounded-lg text-xs z-10 ${
           isHovered ? 'bottom-4 right-4' : 'bottom-4 left-1/2 -translate-x-1/2'
@@ -158,6 +160,7 @@ const ProductCard: FC<{ machine: Machine; isActive: boolean }> = ({
         <ArrowRight size={12} />
         Explore Now
       </motion.button>
+      </Link>
 
       {/* Hover overlay with details */}
       <motion.div

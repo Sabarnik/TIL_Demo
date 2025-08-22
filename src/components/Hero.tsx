@@ -4,11 +4,12 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Play, FileText } from 'lucide-react';
 import Hero3D from './Hero3D';
 import { useRouter } from "next/navigation";
-
+import GetQuoteModal from '../components/GetQuote'; // Make sure this path is correct
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 const Hero: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
+  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false); // State for modal visibility
 
   const router = useRouter();
   useEffect(() => {
@@ -20,6 +21,16 @@ const Hero: React.FC = () => {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  // Function to open the modal
+  const openQuoteModal = () => {
+    setIsQuoteModalOpen(true);
+  };
+
+  // Function to close the modal
+  const closeQuoteModal = () => {
+    setIsQuoteModalOpen(false);
+  };
 
   return (
     <div
@@ -106,7 +117,6 @@ const Hero: React.FC = () => {
                 className={`flex gap-3 ${isMobile ? 'flex-col w-full' : 'flex-col sm:flex-row'}`}
               >
                 {/* Explore Products */}
-
                 <motion.button
                   onClick={() => router.push(`${basePath}/category`)}
                   whileHover={{
@@ -121,9 +131,10 @@ const Hero: React.FC = () => {
                   <span className="text-sm lg:text-base">Explore Products</span>
                   <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </motion.button>
-                {/* Get Quote */}
+                
+                {/* Get Quote - Updated to open modal */}
                 <motion.button
-                  onClick={() => (window.location.href = '/get-quote')}
+                  onClick={openQuoteModal}
                   whileHover={{
                     scale: 1.05,
                     backgroundColor: 'rgba(0,0,0,0.85)',
@@ -138,11 +149,16 @@ const Hero: React.FC = () => {
                   <span className="text-sm lg:text-base">Get Quote</span>
                 </motion.button>
               </motion.div>
-
             </motion.div>
           </div>
         </div>
       </div>
+
+      {/* Get Quote Modal */}
+      <GetQuoteModal 
+        isOpen={isQuoteModalOpen} 
+        onClose={closeQuoteModal} 
+      />
     </div>
   );
 };

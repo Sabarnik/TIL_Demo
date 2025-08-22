@@ -839,7 +839,7 @@ const PageContent = () => {
                     by: 'Confederation of Indian Industry'
                 }
             ],
-            image: `${basePath}/about-awards.jpg`
+            image: `${basePath}/news6.jpg`
         },
         global: {
             title: 'Global Footprint',
@@ -1125,35 +1125,99 @@ const PageContent = () => {
                                         ))}
                                     </div>
                                 </div>
-                            )}
+                            )}     
 
                             {activeTab === 'leadership' && (
                                 <div>
                                     <h2 className="text-2xl font-bold text-gray-800 mb-4">{contentData.leadership.title}</h2>
                                     <p className="text-gray-600 mb-8">{contentData.leadership.description}</p>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                                        {contentData.leadership.executives.map((executive, index) => (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                        {[
+                                            {
+                                                name: 'Pinaki Niyogy',
+                                                title: 'Chief Executive Officer',
+                                                image: `${basePath}/pinaki.jpg`,
+                                                description: 'Leading TIL with strategic vision and extensive industry experience.'
+                                            },
+                                              {
+                                                name: 'Rishabh P Nair',
+                                                title: 'Head Of Brand, Content & PR',
+                                                image: `${basePath}/Risabh.png`,
+                                                description: 'Building brand reputation and strategic communication.'
+                                            },
+                                            {
+                                                name: 'Arvind Rishi',
+                                                title: 'AVP- Sales & After Market',
+                                                image: `${basePath}/arvind.jpeg`,
+                                                description: 'Driving sales growth and ensuring exceptional customer service.'
+                                            },
+                                            {
+                                                name: 'Mr. Kanhaiya Gupta',
+                                                title: 'Chief Financial Officer',
+                                                image: `${basePath}/Kanhaiya.png`,
+                                                description: 'Managing financial strategy and ensuring sustainable growth.'
+                                            },
+                                            {
+                                                name: 'Ms. Shamita Nandi',
+                                                title: 'Chief Human Resource Officer',
+                                                image: `${basePath}/Shamita.png`,
+                                                description: 'Developing talent and fostering a positive organizational culture.'
+                                            },
+                                            {
+                                                name: 'Chandrani Chatterjee',
+                                                title: 'Company Secretary',
+                                                image: `${basePath}/chandrani.jpg`,
+                                                description: 'Ensuring corporate governance and regulatory compliance.'
+                                            },
+                                            {
+                                                name: 'Mr. Saikat Bagchi',
+                                                title: 'Head - Supply Chain & Commercial',
+                                                image: `${basePath}/saiket.png`,
+                                                description: 'Optimizing supply chain operations and commercial excellence.'
+                                            }
+                                          
+                                        ].map((member, index) => (
                                             <motion.div
                                                 key={index}
-                                                className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100"
+                                                className="relative bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 group h-40"
                                                 initial={{ opacity: 0, y: 20 }}
                                                 animate={{ opacity: 1, y: 0 }}
                                                 transition={{ delay: 0.1 + index * 0.1 }}
-                                                whileHover={{ y: -5 }}
                                             >
-                                                <div className="h-48 overflow-hidden">
-                                                    <img src={executive.image} alt={executive.name} className="w-full h-full object-cover" />
-                                                </div>
-                                                <div className="p-4">
-                                                    <h3 className="font-bold text-gray-800">{executive.name}</h3>
-                                                    <p className="text-sm text-[#F1B434] mb-2">{executive.position}</p>
-                                                    <p className="text-xs text-gray-600">{executive.experience}</p>
+                                                <div className="flex h-full">
+                                                    {/* Image Section */}
+                                                    <div className="relative flex-shrink-0 w-40 h-full overflow-hidden">
+                                                        <div className="absolute inset-0 flex items-center justify-center p-4">
+                                                            <img
+                                                                src={member.image}
+                                                                alt={member.name}
+                                                                className="w-28 h-28 object-cover rounded-full border-4 border-[#F1B434] shadow-md z-10 relative transition-transform duration-300 group-hover:scale-110"
+                                                            />
+                                                        </div>
+                                                        <div className="absolute inset-0 bg-gradient-to-r from-[#F1B434]/20 to-transparent"></div>
+                                                    </div>
+
+                                                    {/* Content Section */}
+                                                    <div className="flex-1 p-4 flex flex-col justify-center">
+                                                        <h3 className="font-bold text-gray-800 text-lg group-hover:text-[#F1B434] transition-colors duration-300">{member.name}</h3>
+                                                        <p className="text-sm text-[#F1B434] font-medium">{member.title}</p>
+                                                    </div>
+
+                                                    {/* Hover description that appears on the side */}
+                                                    <div className="absolute top-0 left-40 right-0 h-full bg-gradient-to-r from-[#F1B434] to-[#FFE352] text-white p-4 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-center shadow-lg rounded-r-xl">
+                                                        <h3 className="font-bold text-lg mb-1">{member.name}</h3>
+                                                        <p className="text-sm font-medium mb-2">{member.title}</p>
+                                                        <p className="text-xs leading-tight">
+                                                            {member.description}
+                                                        </p>
+                                                    </div>
                                                 </div>
                                             </motion.div>
                                         ))}
                                     </div>
                                 </div>
                             )}
+
 
                             {activeTab === 'awards' && (
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

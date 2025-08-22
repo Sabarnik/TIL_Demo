@@ -5,8 +5,6 @@ import { Package, Zap, Star, Settings, ChevronRight, ChevronLeft } from 'lucide-
 import BrochureDownloadModal from '../../components/BrochureDownload';
 import Link from 'next/link';
 
-
-
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 const Page: React.FC = () => {
@@ -175,7 +173,7 @@ const Page: React.FC = () => {
   ];
 
   return (
-    <div className="bg-gradient-to-b from-[#f8f9fa] to-white min-h-screen font-sans">
+    <div className="bg-gradient-to-b from-[#f8f9fa] to-white min-h-screen font-sans overflow-hidden">
       {/* Hero Section */}
       <div className="relative bg-gradient-to-b from-black/80 to-black/35 h-72 w-full overflow-hidden">
         <img
@@ -186,7 +184,6 @@ const Page: React.FC = () => {
 
         {/* Left-to-right overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent z-10" />
-
 
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-transparent z-20" />
 
@@ -235,8 +232,6 @@ const Page: React.FC = () => {
           </div>
         </div>
       </div>
-
-
 
       <main className="max-w-7xl mx-auto px-6 md:px-10 xl:px-20 py-16 -mt-6 relative z-10">
         {/* Top Section - Introduction and Quick Links */}
@@ -301,7 +296,6 @@ const Page: React.FC = () => {
               </ul>
             </div>
           </motion.div>
-
         </div>
 
         {/* Category Navigation */}
@@ -391,7 +385,6 @@ const Page: React.FC = () => {
                         <span>Explore Product</span>
                         <ChevronRight className="w-4 h-4 ml-1" />
                       </Link>
-
                     </div>
                   </div>
                 </motion.div>
@@ -403,167 +396,175 @@ const Page: React.FC = () => {
         {/* Category-Specific Carousel */}
         <AnimatePresence>
           {activeCategory && (
-            <>
-              {/* Full width gradient background */}
+            <motion.div
+              key={`gradient-${activeCategory}`}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+                transition: {
+                  opacity: { duration: 0.4 },
+                  scale: { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
+                }
+              }}
+              exit={{
+                opacity: 0,
+                scale: 0.95,
+                transition: {
+                  opacity: { duration: 0.3 },
+                  scale: { duration: 0.4, ease: [0.22, 1, 0.36, 1] }
+                }
+              }}
+              className="relative mb-16"
+            >
+              {/* Animated gradient background */}
               <motion.div
-                key={`gradient-${activeCategory}`}
-                initial={{ opacity: 0, height: 0 }}
-                animate={{
-                  opacity: 1,
-                  height: 'auto',
-                  transition: {
-                    opacity: { duration: 0.3 },
-                    height: { duration: 0.4, ease: [0.22, 1, 0.36, 1] }
-                  }
+                className="absolute inset-0 -z-10 rounded-xl"
+                initial={{ 
+                  background: `radial-gradient(circle at 50% 50%, rgba(241, 180, 52, 0.1) 0%, transparent 0%)`
                 }}
-                exit={{
-                  opacity: 0,
-                  height: 0,
-                  transition: {
-                    opacity: { duration: 0.2 },
-                    height: { duration: 0.3, ease: [0.22, 1, 0.36, 1] }
-                  }
+                animate={{ 
+                  background: `radial-gradient(circle at 50% 50%, rgba(241, 180, 52, 0.1) 50%, transparent 70%)`
                 }}
-                className={`w-screen bg-gradient-to-b ${getActiveCategoryColor()}/10 to-white mb-16 overflow-hidden relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]`}
-              >
-                {/* Content container with max width */}
-                <div className="max-w-6xl mx-auto p-8">
-                  <motion.div
-                    initial={{ y: -20 }}
-                    animate={{ y: 0 }}
-                    exit={{ y: -20 }}
-                    transition={{ duration: 0.3 }}
-                    className="rounded-xl"
-                  >
-                    <div className="flex items-center justify-between mb-6">
-                      <h2 className="text-2xl font-bold text-gray-800">
-                        {primaryCategories.find(c => c.id === activeCategory)?.name}
-                      </h2>
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={handlePrevSlide}
-                          className="p-2 rounded-full bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
-                          disabled={categoryProducts[activeCategory as keyof typeof categoryProducts].length <= 1}
-                        >
-                          <ChevronLeft className="w-5 h-5" />
-                        </button>
-                        <button
-                          onClick={handleNextSlide}
-                          className="p-2 rounded-full bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
-                          disabled={categoryProducts[activeCategory as keyof typeof categoryProducts].length <= 1}
-                        >
-                          <ChevronRight className="w-5 h-5" />
-                        </button>
-                      </div>
+                transition={{ duration: 0.8, ease: "easeOut" }}
+              />
+              
+              <div className="p-8">
+                <motion.div
+                  initial={{ y: -20 }}
+                  animate={{ y: 0 }}
+                  exit={{ y: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="rounded-xl"
+                >
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-2xl font-bold text-gray-800">
+                      {primaryCategories.find(c => c.id === activeCategory)?.name}
+                    </h2>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={handlePrevSlide}
+                        className="p-2 rounded-full bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                        disabled={categoryProducts[activeCategory as keyof typeof categoryProducts].length <= 1}
+                      >
+                        <ChevronLeft className="w-5 h-5" />
+                      </button>
+                      <button
+                        onClick={handleNextSlide}
+                        className="p-2 rounded-full bg-white text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+                        disabled={categoryProducts[activeCategory as keyof typeof categoryProducts].length <= 1}
+                      >
+                        <ChevronRight className="w-5 h-5" />
+                      </button>
                     </div>
+                  </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                      {/* Product Image */}
-                      <div className="relative h-96 rounded-lg overflow-hidden shadow-lg">
-                        <AnimatePresence mode="wait">
-                          <motion.img
-                            key={currentSlide}
-                            src={categoryProducts[activeCategory as keyof typeof categoryProducts][currentSlide].image}
-                            alt={categoryProducts[activeCategory as keyof typeof categoryProducts][currentSlide].name}
-                            className="w-full h-full object-cover"
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: 20 }}
-                            transition={{ duration: 0.3 }}
-                          />
-                        </AnimatePresence>
-                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-                          <div className="flex space-x-2 justify-center">
-                            {categoryProducts[activeCategory as keyof typeof categoryProducts].map((_, index) => (
-                              <button
-                                key={index}
-                                onClick={() => setCurrentSlide(index)}
-                                className={`w-3 h-3 rounded-full ${currentSlide === index
-                                  ? 'bg-white'
-                                  : 'bg-white/50'
-                                  }`}
-                                aria-label={`Go to slide ${index + 1}`}
-                              />
-                            ))}
-                          </div>
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {/* Product Image */}
+                    <div className="relative h-96 rounded-lg overflow-hidden shadow-lg">
+                      <AnimatePresence mode="wait">
+                        <motion.img
+                          key={currentSlide}
+                          src={categoryProducts[activeCategory as keyof typeof categoryProducts][currentSlide].image}
+                          alt={categoryProducts[activeCategory as keyof typeof categoryProducts][currentSlide].name}
+                          className="w-full h-full object-cover"
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: 20 }}
+                          transition={{ duration: 0.3 }}
+                        />
+                      </AnimatePresence>
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                        <div className="flex space-x-2 justify-center">
+                          {categoryProducts[activeCategory as keyof typeof categoryProducts].map((_, index) => (
+                            <button
+                              key={index}
+                              onClick={() => setCurrentSlide(index)}
+                              className={`w-3 h-3 rounded-full ${currentSlide === index
+                                ? 'bg-white'
+                                : 'bg-white/50'
+                                }`}
+                              aria-label={`Go to slide ${index + 1}`}
+                            />
+                          ))}
                         </div>
                       </div>
-
-                      {/* Product Info */}
-                      <div>
-                        <motion.h3
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.1 }}
-                          className="text-2xl font-bold text-gray-800 mb-2"
-                        >
-                          {categoryProducts[activeCategory as keyof typeof categoryProducts][currentSlide].name}
-                        </motion.h3>
-                        <motion.p
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.2 }}
-                          className="text-gray-600 mb-6"
-                        >
-                          {categoryProducts[activeCategory as keyof typeof categoryProducts][currentSlide].description}
-                        </motion.p>
-
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.3 }}
-                          className="mb-6"
-                        >
-                          <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
-                            Key Features
-                          </h4>
-                          <ul className="space-y-2">
-                            {categoryProducts[activeCategory as keyof typeof categoryProducts][currentSlide].features.map((feature, index) => (
-                              <motion.li
-                                key={index}
-                                className="flex items-start"
-                                initial={{ opacity: 0, x: 10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.4 + index * 0.1 }}
-                              >
-                                <div className="flex-shrink-0 h-5 w-5 text-[#F1B434] mr-2">
-                                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                  </svg>
-                                </div>
-                                <span className="text-gray-700">{feature}</span>
-                              </motion.li>
-                            ))}
-                          </ul>
-                        </motion.div>
-
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: 0.6 }}
-                          className="flex flex-wrap gap-3"
-                        >
-                          <button className="px-6 py-3 bg-[#F1B434] text-white font-medium rounded-lg hover:bg-[#d89c2a] transition-colors shadow-md">
-                            <Link
-                              href={`${basePath}/category/${categoryProducts[activeCategory as keyof typeof categoryProducts][currentSlide].id
-                                }`}
-                            >
-                              View Details
-                            </Link>
-                          </button>
-                          <button
-                            onClick={() => setIsModalOpen(true)}
-                            className="px-6 py-3 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
-                          >
-                            Download Brochure
-                          </button>
-                        </motion.div>
-                      </div>
                     </div>
-                  </motion.div>
-                </div>
-              </motion.div>
-            </>
+
+                    {/* Product Info */}
+                    <div>
+                      <motion.h3
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                        className="text-2xl font-bold text-gray-800 mb-2"
+                      >
+                        {categoryProducts[activeCategory as keyof typeof categoryProducts][currentSlide].name}
+                      </motion.h3>
+                      <motion.p
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="text-gray-600 mb-6"
+                      >
+                        {categoryProducts[activeCategory as keyof typeof categoryProducts][currentSlide].description}
+                      </motion.p>
+
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                        className="mb-6"
+                      >
+                        <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                          Key Features
+                        </h4>
+                        <ul className="space-y-2">
+                          {categoryProducts[activeCategory as keyof typeof categoryProducts][currentSlide].features.map((feature, index) => (
+                            <motion.li
+                              key={index}
+                              className="flex items-start"
+                              initial={{ opacity: 0, x: 10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: 0.4 + index * 0.1 }}
+                            >
+                              <div className="flex-shrink-0 h-5 w-5 text-[#F1B434] mr-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                                </svg>
+                              </div>
+                              <span className="text-gray-700">{feature}</span>
+                            </motion.li>
+                          ))}
+                        </ul>
+                      </motion.div>
+
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.6 }}
+                        className="flex flex-wrap gap-3"
+                      >
+                        <button className="px-6 py-3 bg-[#F1B434] text-white font-medium rounded-lg hover:bg-[#d89c2a] transition-colors shadow-md">
+                          <Link
+                            href={`${basePath}/category/${categoryProducts[activeCategory as keyof typeof categoryProducts][currentSlide].id
+                              }`}
+                          >
+                            View Details
+                          </Link>
+                        </button>
+                        <button
+                          onClick={() => setIsModalOpen(true)}
+                          className="px-6 py-3 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
+                        >
+                          Download Brochure
+                        </button>
+                      </motion.div>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
           )}
         </AnimatePresence>
 
@@ -643,7 +644,6 @@ const Page: React.FC = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
-
     </div>
   );
 };

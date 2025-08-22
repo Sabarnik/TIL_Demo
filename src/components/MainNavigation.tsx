@@ -1,4 +1,5 @@
 'use client'
+import { useRouter   } from 'next/navigation';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   ChevronDown,
@@ -3366,6 +3367,8 @@ const ContactMegamenu: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
 
 const MainNavigation: React.FC = () => {
+  const router = useRouter();                 // ✅ works now
+
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isScrollingDown, setIsScrollingDown] = useState(false);
@@ -3430,14 +3433,16 @@ const MainNavigation: React.FC = () => {
   }, [isMobileMenuOpen]);
 
   const navItems = [
-    { name: 'About Us', hasSubmenu: true },
-    { name: 'Products', hasSubmenu: true },
-    { name: 'Customer Support', hasSubmenu: true },
-    { name: 'Investor Relations', hasSubmenu: true },
-    { name: 'Media', hasSubmenu: true },
-    { name: 'Careers', hasSubmenu: true },
-    { name: 'Contact Us', hasSubmenu: true },
-  ];
+  { name: 'About Us', hasSubmenu: true, path: '/about-us' },
+  { name: 'Products', hasSubmenu: true, path: '/category' },
+  { name: 'Customer Support', hasSubmenu: true, path: '/customer-support' },
+  { name: 'Investor Relations', hasSubmenu: true, path: '/investor-relations' },
+  { name: 'Media', hasSubmenu: true, path: '/media' },
+  { name: 'Careers', hasSubmenu: true, path: '/careers' },
+  { name: 'Contact Us', hasSubmenu: true, path: '/contact-us' },
+];
+
+
 
   const handleDesktopMenuHover = useCallback((menuName: string) => {
     if (isMounted && window.innerWidth >= 1024) {
@@ -3513,30 +3518,39 @@ const MainNavigation: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 xl:px-20">
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex h-14 overflow-x-hidden whitespace-nowrap">
-            {navItems.map((item) => (
-              <div
-                key={item.name}
-                className="flex-1"
-                onMouseEnter={() => item.hasSubmenu && handleDesktopMenuHover(item.name)}
-              >
-                <motion.button
-                  className={`flex items-center justify-center space-x-1 px-4 font-bold text-sm uppercase tracking-wide transition-all duration-200 w-full h-full ${activeMenu === item.name
-                    ? 'bg-[#fbb53d] text-[#000]'
-                    : 'text-[#fbb53d] hover:text-black hover:bg-[#fbb53d]'
-                    }`}
-                  whileHover={{ scale: 1.005 }}
-                  whileTap={{ scale: 0.995 }}
-                >
-                  <span>{item.name}</span>
-                  {item.hasSubmenu && (
-                    <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${activeMenu === item.name ? 'rotate-180' : ''
-                      }`} />
-                  )}
-                </motion.button>
-              </div>
-            ))}
-          </div>
+<div className="hidden lg:flex h-14 overflow-x-hidden whitespace-nowrap">
+  {navItems.map((item) => (
+    <div
+      key={item.name}
+      className="flex-1"
+      onMouseEnter={() => item.hasSubmenu && handleDesktopMenuHover(item.name)}
+    >
+      <motion.button
+        onClick={() => {
+          router.push(`${basePath}${item.path}`); // navigate with basePath
+          setActiveMenu(null); // close hover menu
+        }}
+        className={`flex items-center justify-center space-x-1 px-4 font-bold text-sm uppercase tracking-wide transition-all duration-200 w-full h-full ${
+          activeMenu === item.name
+            ? 'bg-[#fbb53d] text-[#000]'
+            : 'text-[#fbb53d] hover:text-black hover:bg-[#fbb53d]'
+        }`}
+        whileHover={{ scale: 1.005 }}
+        whileTap={{ scale: 0.995 }}
+      >
+        <span>{item.name}</span>
+        {item.hasSubmenu && (
+          <ChevronDown
+            className={`w-3 h-3 transition-transform duration-200 ${
+              activeMenu === item.name ? 'rotate-180' : ''
+            }`}
+          />
+        )}
+      </motion.button>
+    </div>
+  ))}
+</div>
+
 
           {/* Mobile Navigation Header */}
           <div className="flex lg:hidden items-center justify-between h-14">
@@ -3721,5 +3735,4 @@ const MainNavigation: React.FC = () => {
     </div>
   );
 };
-
 export default MainNavigation;

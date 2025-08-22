@@ -93,7 +93,7 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
           {/* Modal - Responsive layout */}
           <motion.div
             className="relative w-full max-w-5xl bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row"
-            style={{ height: isMobile ? '90vh' : 'auto', maxHeight: isMobile ? '90vh' : 'none' }}
+            style={{ height: isMobile ? '85vh' : 'auto', maxHeight: isMobile ? '85vh' : '90vh' }}
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
@@ -113,14 +113,6 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
                   alt="Get a Quote"
                   className="w-full h-full object-cover"
                 />
-                {/* TIL Logo in top right corner */}
-                <div className="absolute top-4 right-4 w-24">
-                  <img 
-                    src={`${basePath}/til-logo.png`} 
-                    alt="TIL Logo"
-                    className="w-full"
-                  />
-                </div>
               </div>
             )}
 
@@ -136,23 +128,23 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
               </button>
 
               {/* Content */}
-              <div className={`h-full ${isMobile ? 'p-4' : 'p-8'}`}>
+              <div className={`h-full ${isMobile ? 'p-4' : 'p-6'}`}>
                 <motion.div
                   initial={{ y: -10, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.2 }}
                 >
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-between mb-3">
                     <div>
                       <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-1" style={{ fontFamily: 'Arial, sans-serif' }}>
                         REQUEST A QUOTE
                       </h2>
-                      <p className="text-sm md:text-base text-gray-600" style={{ fontFamily: 'Arial, sans-serif' }}>
+                      <p className="text-xs md:text-sm text-gray-600" style={{ fontFamily: 'Arial, sans-serif' }}>
                         Fill out the form below and our team will contact you shortly
                       </p>
                     </div>
                     {isMobile && (
-                      <div className="w-16">
+                      <div className="w-12">
                         <img 
                           src={`${basePath}/til-logo.png`} 
                           alt="TIL Logo"
@@ -161,10 +153,10 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
                       </div>
                     )}
                   </div>
-                  <div className="h-1 w-12 mb-4 md:mb-6" style={{ backgroundColor: '#F1B434' }}></div>
+                  <div className="h-1 w-12 mb-3" style={{ backgroundColor: '#F1B434' }}></div>
                 </motion.div>
 
-                <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-2 md:space-y-3">
                   {/* Full Name */}
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
@@ -205,7 +197,7 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
                     sx={{ 
                       display: 'flex', 
                       flexDirection: isMobile ? 'column' : 'row',
-                      gap: 2
+                      gap: 1.5
                     }}
                   >
                     <TextField
@@ -338,7 +330,7 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
                       variant="outlined"
                       fullWidth
                       multiline
-                      rows={4}
+                      rows={3}
                       size={isMobile ? "small" : "medium"}
                       InputLabelProps={{
                         style: { 
@@ -361,12 +353,12 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.55 }}
                   >
-                    <div className="border-t border-gray-200 my-3 md:my-4"></div>
+                    <div className="border-t border-gray-200 my-2"></div>
                   </motion.div>
 
                   {/* Recaptcha - Adjusted for mobile */}
                   <motion.div
-                    className="py-2"
+                    className="py-1"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6 }}
@@ -397,9 +389,9 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
                         color: '#000',
                         textTransform: 'none',
                         fontWeight: 600,
-                        padding: isMobile ? '8px' : '10px',
+                        padding: isMobile ? '6px' : '8px',
                         borderRadius: '4px',
-                        marginTop: '8px',
+                        marginTop: '4px',
                         fontSize: isMobile ? '0.875rem' : '1rem',
                         fontFamily: 'Arial, sans-serif',
                         '&:focus': {
