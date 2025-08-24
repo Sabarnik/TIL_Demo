@@ -19,21 +19,47 @@ import {
     Zap
 } from 'lucide-react';
 import Link from "next/link";
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
 type Milestone = {
     year: string;
     event: string;
-    image?: string; // optional milestone image
+    image?: string;
 };
 
-const HistoryRoulette: React.FC<{ milestones: Milestone[]; autoPlayInterval?: number }> = ({
-    milestones,
+type DecadeGroup = {
+    decade: string;
+    events: Milestone[];
+};
+
+const groupByDecade = (milestones: Milestone[]): DecadeGroup[] => {
+    const decadeMap: Record<string, Milestone[]> = {};
+
+    milestones.forEach(m => {
+        const yearNum = parseInt(m.year.split('-')[0]); // Handles cases like "2002-03"
+        const decade = `${Math.floor(yearNum / 10) * 10}s`; // e.g., 1994 → "1990s"
+        if (!decadeMap[decade]) decadeMap[decade] = [];
+        decadeMap[decade].push(m);
+    });
+
+    return Object.entries(decadeMap).map(([decade, events]) => ({
+        decade,
+        events
+    }));
+};
+
+
+
+const HistoryRoulette: React.FC<{ decades: DecadeGroup[]; autoPlayInterval?: number }> = ({
+    decades,
     autoPlayInterval = 3000
 }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const currentDecade = decades[currentIndex];
 
-    const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % milestones.length);
-    const prevSlide = () => setCurrentIndex((prev) => (prev - 1 + milestones.length) % milestones.length);
+    const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % decades.length);
+    const prevSlide = () => setCurrentIndex((prev) => (prev - 1 + decades.length) % decades.length);
 
     // autoplay
     useEffect(() => {
@@ -46,52 +72,43 @@ const HistoryRoulette: React.FC<{ milestones: Milestone[]; autoPlayInterval?: nu
     }, [autoPlayInterval]);
 
     return (
-        <div className="relative w-full mx-auto bg-white rounded-xl shadow-lg p-6 md:p-8">
+        <div className="relative w-full mx-auto bg-white rounded-2xl shadow-xl p-6 md:p-8">
             {/* Header */}
             <div className="mb-8 text-center">
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-800">Our Historical Journey</h2>
-                <div className="w-20 h-1 bg-gradient-to-r from-[#F1B434] to-[#FFE352] mx-auto mt-3 rounded-full" />
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-800">Our Journey Through Decades</h2>
+                <div className="w-20 h-1.5 bg-gradient-to-r from-amber-400 to-yellow-300 mx-auto mt-3 rounded-full" />
             </div>
 
             <div className="flex flex-col lg:flex-row items-center gap-8">
                 {/* Circular Timeline */}
                 <div className="relative w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 flex items-center justify-center">
-
-                    {/* Outer circle track */}
                     <div className="absolute w-full h-full rounded-full border-2 border-dashed border-gray-200" />
+                    <div className="absolute w-6 h-6 rounded-full bg-amber-500 z-10 shadow-lg" />
 
-                    {/* Center point */}
-                    <div className="absolute w-6 h-6 rounded-full bg-[#F1B434] z-10 shadow-lg" />
-
-                    {milestones.map((m, i) => {
-                        const angle = (2 * Math.PI * (i - currentIndex)) / milestones.length;
-                        const distance = 140; // Radius
+                    {decades.map((d, i) => {
+                        const angle = (2 * Math.PI * (i - currentIndex)) / decades.length;
+                        const distance = 140;
                         const x = distance * Math.cos(angle);
                         const y = distance * Math.sin(angle);
                         const isActive = i === currentIndex;
 
                         return (
-                            <button
+                            <motion.button
                                 key={i}
                                 onClick={() => setCurrentIndex(i)}
-                                className={`absolute flex flex-col items-center justify-center rounded-full cursor-pointer transition-all duration-500 ${isActive
-                                    ? 'bg-[#F1B434] text-white scale-125 shadow-xl font-bold ring-4 ring-[#F8D778] z-20 w-16 h-16'
+                                className={`absolute flex items-center justify-center rounded-full cursor-pointer transition-all duration-500 ${isActive
+                                    ? 'bg-amber-500 text-white scale-125 shadow-xl font-bold ring-4 ring-amber-200 z-20 w-16 h-16'
                                     : 'bg-gray-50 text-gray-700 hover:bg-gray-100 shadow-md z-10 w-12 h-12'
                                     }`}
-                                style={{
-                                    transform: `translate(${x}px, ${y}px)`,
-                                }}
-                                aria-label={`View milestone from ${m.year}`}
+                                style={{ transform: `translate(${x}px, ${y}px)` }}
+                                aria-label={`View events from ${d.decade}`}
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.95 }}
                             >
-                                {m.image && (
-                                    <img
-                                        src={m.image}
-                                        alt={m.year}
-                                        className={`w-6 h-6 object-cover rounded-full mb-1 ${isActive ? 'border-2 border-white' : 'border border-gray-200'}`}
-                                    />
-                                )}
-                                <span className={`${isActive ? 'text-xs' : 'text-[10px]'} font-medium`}>{m.year}</span>
-                            </button>
+                                <span className={`${isActive ? 'text-xs' : 'text-[10px]'} font-medium`}>
+                                    {d.decade}
+                                </span>
+                            </motion.button>
                         );
                     })}
                 </div>
@@ -101,57 +118,67 @@ const HistoryRoulette: React.FC<{ milestones: Milestone[]; autoPlayInterval?: nu
                     <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-6 shadow-inner">
                         <div className="flex items-center justify-between mb-4">
                             <span className="text-sm text-gray-500">
-                                Milestone {currentIndex + 1} of {milestones.length}
+                                Decade {currentIndex + 1} of {decades.length}
                             </span>
                             <div className="flex items-center gap-2">
-                                <button
+                                <motion.button
                                     onClick={prevSlide}
                                     className="p-2 bg-white rounded-lg hover:bg-gray-50 transition-all shadow-sm text-gray-700"
-                                    aria-label="Previous milestone"
+                                    aria-label="Previous decade"
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                         <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
                                     </svg>
-                                </button>
-                                <button
+                                </motion.button>
+                                <motion.button
                                     onClick={nextSlide}
-                                    className="p-2 bg-[#F1B434] text-white rounded-lg hover:bg-[#E5A920] transition-all shadow-sm"
-                                    aria-label="Next milestone"
+                                    className="p-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-all shadow-sm"
+                                    aria-label="Next decade"
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                         <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
                                     </svg>
-                                </button>
+                                </motion.button>
                             </div>
                         </div>
 
-                        <h3 className="text-2xl font-bold text-[#F1B434] mb-2">
-                            {milestones[currentIndex].year}
-                        </h3>
-                        <p className="text-gray-700 mb-6 leading-relaxed">
-                            {milestones[currentIndex].event}
-                        </p>
-
-                        {milestones[currentIndex].image && (
-                            <div className="mb-6 rounded-lg overflow-hidden shadow-md">
-                                <img
-                                    src={milestones[currentIndex].image}
-                                    alt={milestones[currentIndex].year}
-                                    className="w-full h-48 object-cover"
-                                />
-                            </div>
-                        )}
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={currentIndex}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <h3 className="text-2xl font-bold text-amber-500 mb-4">
+                                    {currentDecade.decade}
+                                </h3>
+                                <ul className="text-gray-700 mb-6 leading-relaxed space-y-2">
+                                    {currentDecade.events.map((e, idx) => (
+                                        <li key={idx}>
+                                            <strong>{e.year}:</strong> {e.event}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </motion.div>
+                        </AnimatePresence>
 
                         <div className="flex gap-4 justify-center">
-                            <button
+                            <motion.button
                                 onClick={() => {
-                                    const randomIndex = Math.floor(Math.random() * milestones.length);
+                                    const randomIndex = Math.floor(Math.random() * decades.length);
                                     setCurrentIndex(randomIndex);
                                 }}
                                 className="px-4 py-2 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition-all shadow-sm text-sm font-medium"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
                             >
-                                Milestones
-                            </button>
+                                Random Decade
+                            </motion.button>
                         </div>
                     </div>
                 </div>
@@ -159,10 +186,8 @@ const HistoryRoulette: React.FC<{ milestones: Milestone[]; autoPlayInterval?: nu
         </div>
     );
 };
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 
-// Roulette-style History Carousel (paste-2 logic)
 const HistoryCarousel: React.FC<{
     milestones: Milestone[];
     baseIntervalMs?: number;
@@ -245,19 +270,17 @@ const HistoryCarousel: React.FC<{
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 onWheel={handleWheel}
-                className="relative w-full bg-white rounded-xl shadow-lg p-6"
+                className="relative w-full bg-white rounded-2xl shadow-xl p-6"
                 role="region"
                 aria-label="Company history timeline"
             >
                 <div className="flex flex-col lg:flex-row gap-8">
-                    {/* Empty left column to push content to right */}
                     <div className="hidden lg:block lg:w-1/2"></div>
 
-                    {/* Right Column - Timeline Content */}
                     <div className="lg:w-1/2 bg-gray-50 p-6 rounded-lg border border-gray-200 overflow-hidden">
                         <div className="mb-6 text-center">
                             <h2 className="text-2xl font-bold text-gray-800">Our Timeline</h2>
-                            <div className="w-20 h-1 bg-gradient-to-r from-[#F1B434] to-[#FFE352] mx-auto mt-3 rounded-full" />
+                            <div className="w-20 h-1.5 bg-gradient-to-r from-amber-400 to-yellow-300 mx-auto mt-3 rounded-full" />
                         </div>
 
                         <div className="flex items-center justify-between mb-4">
@@ -265,38 +288,44 @@ const HistoryCarousel: React.FC<{
                                 {String(index + 1).padStart(2, '0')}/{String(total).padStart(2, '0')}
                             </div>
                             <div className="flex items-center gap-2">
-                                <button
+                                <motion.button
                                     onClick={prev}
                                     className="px-3 py-1.5 text-sm rounded bg-white border border-gray-200 hover:bg-gray-50 shadow-sm flex items-center gap-1"
                                     aria-label="Previous milestone"
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                                         <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
                                     </svg>
                                     Prev
-                                </button>
-                                <button
+                                </motion.button>
+                                <motion.button
                                     onClick={next}
                                     className="px-3 py-1.5 text-sm rounded bg-white border border-gray-200 hover:bg-gray-50 shadow-sm flex items-center gap-1"
                                     aria-label="Next milestone"
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
                                 >
                                     Next
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                                         <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
                                     </svg>
-                                </button>
-                                <button
+                                </motion.button>
+                                <motion.button
                                     onClick={handleSpeedUp}
                                     className={`px-3 py-1.5 text-sm rounded border flex items-center gap-1 ${speedUp
-                                        ? 'bg-[#F1B434] text-white border-[#F1B434]'
+                                        ? 'bg-amber-500 text-white border-amber-500'
                                         : 'bg-white text-gray-800 border-gray-200 hover:bg-gray-50'
                                         } shadow-sm`}
                                     aria-pressed={speedUp}
                                     aria-label="Speed up timeline"
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
                                 >
                                     <Zap className="w-4 h-4" />
                                     Speed Up
-                                </button>
+                                </motion.button>
                             </div>
                         </div>
 
@@ -311,7 +340,7 @@ const HistoryCarousel: React.FC<{
                                     className="absolute inset-0 flex flex-col justify-center"
                                 >
                                     <div className="flex items-center gap-3 mb-2">
-                                        <div className="bg-[#F1B434] text-white text-sm font-bold px-2 py-1 rounded">
+                                        <div className="bg-amber-500 text-white text-sm font-bold px-2 py-1 rounded">
                                             {current.year}
                                         </div>
                                     </div>
@@ -322,13 +351,13 @@ const HistoryCarousel: React.FC<{
                             </AnimatePresence>
                         </div>
 
-
                         {current.image && (
                             <div className="mt-4 rounded-lg overflow-hidden shadow-md">
                                 <img
                                     src={current.image}
                                     alt={current.year}
                                     className="w-full h-48 object-cover"
+                                    loading="lazy"
                                 />
                             </div>
                         )}
@@ -343,12 +372,12 @@ const HistoryCarousel: React.FC<{
                                         duration: (speedUp ? acceleratedIntervalMs : baseIntervalMs) / 1000,
                                         ease: 'linear'
                                     }}
-                                    className="h-2 bg-gradient-to-r from-[#F1B434] to-[#FFE352]"
+                                    className="h-2 bg-gradient-to-r from-amber-400 to-yellow-300"
                                 />
                             </div>
                             <div className="mt-2 text-xs text-gray-500 flex justify-between">
                                 <span>
-                                    {paused ? 'Paused (hover to pause)' : speedUp ? 'Fast Mode' : 'Auto-rotating'}
+                                    {paused ? 'Paused' : speedUp ? 'Fast Mode' : 'Auto-rotating'}
                                 </span>
                                 <span>
                                     {Math.round((speedUp ? acceleratedIntervalMs : baseIntervalMs) / 1000)}s interval
@@ -380,7 +409,7 @@ const PageContent = () => {
         router.push(`${pathname}?tab=${tabId}`);
     };
 
-    const submenuData = {
+    const submenuData = {  
         company: {
             items: [
                 {
@@ -642,13 +671,13 @@ const PageContent = () => {
             id: 'awards',
             title: 'Awards',
             icon: <Trophy className="w-5 h-5" />,
-            submenu: submenuData.company // Using company submenu as it contains awards
+            submenu: submenuData.company
         },
         {
             id: 'global',
             title: 'Global Presence',
             icon: <Globe className="w-5 h-5" />,
-            submenu: submenuData.company // Using company submenu as it contains global presence
+            submenu: submenuData.company
         }
     ];
 
@@ -755,25 +784,25 @@ const PageContent = () => {
                     title: 'Integrity',
                     description:
                         'We conduct business with honesty, fairness and respect for all stakeholders.',
-                    icon: <Shield className="w-6 h-6 text-[#F1B434]" />
+                    icon: <Shield className="w-6 h-6 text-amber-500" />
                 },
                 {
                     title: 'Innovation',
                     description:
                         'Continuous improvement drives our product development and customer solutions.',
-                    icon: <Zap className="w-6 h-6 text-[#F1B434]" />
+                    icon: <Zap className="w-6 h-6 text-amber-500" />
                 },
                 {
                     title: 'Customer Focus',
                     description:
                         'We build lasting relationships by understanding and exceeding customer expectations.',
-                    icon: <HeartHandshake className="w-6 h-6 text-[#F1B434]" />
+                    icon: <HeartHandshake className="w-6 h-6 text-amber-500" />
                 },
                 {
                     title: 'Excellence',
                     description:
                         'We strive for the highest standards in quality, safety and performance.',
-                    icon: <Trophy className="w-6 h-6 text-[#F1B434]" />
+                    icon: <Trophy className="w-6 h-6 text-amber-500" />
                 }
             ]
         },
@@ -874,6 +903,7 @@ const PageContent = () => {
                     src={`${basePath}/about-us-bg.png`}
                     alt="About TIL"
                     className="w-full h-full object-cover object-[10%_bottom] scale-105"
+                    loading="eager"
                 />
 
                 {/* Dark Gradient Overlay from Top */}
@@ -892,7 +922,7 @@ const PageContent = () => {
                             transition={{ duration: 0.8, ease: [0.16, 0.77, 0.47, 0.97] }}
                         >
                             <motion.span
-                                className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-[#F1B434] to-[#FFE352] text-sm font-bold tracking-tight mb-2 mt-8"
+                                className="inline-block text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-300 text-sm font-bold tracking-tight mb-2 mt-8"
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.2, duration: 0.8 }}
@@ -906,11 +936,11 @@ const PageContent = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.3, duration: 0.8 }}
                             >
-                                TIL <span className="text-[#F1B434]">Limited</span>
+                                TIL <span className="text-amber-400">Limited</span>
                             </motion.h1>
 
                             <motion.div
-                                className="w-24 h-1.5 bg-gradient-to-r from-[#F1B434] to-[#FFE352] rounded-full mb-4"
+                                className="w-24 h-1.5 bg-gradient-to-r from-amber-400 to-yellow-300 rounded-full mb-4"
                                 initial={{ scaleX: 0 }}
                                 animate={{ scaleX: 1 }}
                                 transition={{ delay: 0.4, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
@@ -930,7 +960,7 @@ const PageContent = () => {
             </div>
 
             {/* Main Content */}
-            <section className="pb-16 bg-[#f8f9fa]">
+            <section className="pb-16 bg-gray-50">
                 <div className="max-w-7xl mx-auto px-6 md:px-10 xl:px-20 space-y-12">
                     {/* Tab Navigation with Submenu */}
                     <motion.div
@@ -946,8 +976,8 @@ const PageContent = () => {
                         }}
                         className="relative"
                     >
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#F1B434] to-[#FFE352] rounded-xl blur-lg opacity-30 -z-10" />
-                        <div className="bg-white rounded-b-xl shadow-lg overflow-hidden border border-gray-100">
+                        <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-yellow-300 rounded-xl blur-lg opacity-30 -z-10" />
+                        <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
                             <div className="flex flex-col sm:flex-row items-stretch relative">
                                 {tabs.map(tab => (
                                     <div
@@ -956,15 +986,17 @@ const PageContent = () => {
                                         onMouseEnter={() => setHoveredTab(tab.id)}
                                         onMouseLeave={() => setHoveredTab(null)}
                                     >
-                                        <button
+                                        <motion.button
                                             onClick={() => handleTabChange(tab.id)}
                                             className={`flex-1 flex items-center justify-center gap-2 p-4 font-medium transition-colors ${activeTab === tab.id
-                                                ? 'bg-[#F1B434] text-white'
+                                                ? 'bg-amber-500 text-white'
                                                 : 'bg-white text-gray-700 hover:bg-gray-50'
                                                 } w-full`}
+                                            whileHover={{ scale: 1.02 }}
+                                            whileTap={{ scale: 0.98 }}
                                         >
                                             {React.cloneElement(tab.icon, {
-                                                className: `${(tab.icon as any).props.className} ${activeTab === tab.id ? 'text-white' : 'text-[#F1B434]'
+                                                className: `${(tab.icon as any).props.className} ${activeTab === tab.id ? 'text-white' : 'text-amber-500'
                                                     }`
                                             })}
                                             {tab.title}
@@ -972,7 +1004,7 @@ const PageContent = () => {
                                                 className={`w-4 h-4 transition-transform ${hoveredTab === tab.id ? 'rotate-180' : ''
                                                     }`}
                                             />
-                                        </button>
+                                        </motion.button>
 
                                         {/* Submenu Dropdown */}
                                         {hoveredTab === tab.id && (
@@ -981,7 +1013,7 @@ const PageContent = () => {
                                                 animate={{ opacity: 1, y: 0 }}
                                                 exit={{ opacity: 0, y: -10 }}
                                                 transition={{ duration: 0.2 }}
-                                                className="absolute left-0 right-0 top-full z-50 bg-white shadow-lg rounded-b-lg"
+                                                className="absolute left-0 right-0 top-full z-50 bg-white shadow-xl rounded-b-lg border border-gray-100"
                                             >
                                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
                                                     <div className="space-y-4">
@@ -992,10 +1024,11 @@ const PageContent = () => {
                                                             src={tab.submenu.media.image}
                                                             alt={tab.submenu.media.title}
                                                             className="w-full h-40 object-cover rounded-lg"
+                                                            loading="lazy"
                                                         />
                                                         <p className="text-gray-600">{tab.submenu.media.description}</p>
                                                         <button
-                                                            className="text-[#F1B434] font-medium flex items-center gap-1"
+                                                            className="text-amber-500 font-medium flex items-center gap-1 hover:text-amber-600 transition-colors"
                                                             onClick={() => handleTabChange(tab.id)}
                                                         >
                                                             {tab.submenu.media.cta}
@@ -1003,7 +1036,7 @@ const PageContent = () => {
                                                         </button>
                                                         <div className="flex flex-wrap gap-2 mt-2">
                                                             {tab.submenu.media.features.map((feature: string, index: number) => (
-                                                                <span key={index} className="text-xs bg-gray-100 px-2 py-1 rounded-full">
+                                                                <span key={index} className="text-xs bg-amber-100 text-amber-800 px-2 py-1 rounded-full">
                                                                     {feature}
                                                                 </span>
                                                             ))}
@@ -1013,10 +1046,12 @@ const PageContent = () => {
                                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                             {tab.submenu.items.map(
                                                                 (item: { name: string; description: string; image: string }, index: number) => (
-                                                                    <div
+                                                                    <motion.div
                                                                         key={index}
-                                                                        className="p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer"
+                                                                        className="p-3 hover:bg-amber-50 rounded-lg transition-colors cursor-pointer border border-transparent hover:border-amber-200"
                                                                         onClick={() => handleTabChange(tab.id)}
+                                                                        whileHover={{ scale: 1.02 }}
+                                                                        whileTap={{ scale: 0.98 }}
                                                                     >
                                                                         <div className="flex items-start gap-3">
                                                                             <div className="flex-shrink-0 w-12 h-12 bg-gray-100 rounded-lg overflow-hidden">
@@ -1024,6 +1059,7 @@ const PageContent = () => {
                                                                                     src={item.image}
                                                                                     alt={item.name}
                                                                                     className="w-full h-full object-cover"
+                                                                                    loading="lazy"
                                                                                 />
                                                                             </div>
                                                                             <div>
@@ -1031,7 +1067,7 @@ const PageContent = () => {
                                                                                 <p className="text-sm text-gray-500">{item.description}</p>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
+                                                                    </motion.div>
                                                                 )
                                                             )}
                                                         </div>
@@ -1069,7 +1105,7 @@ const PageContent = () => {
                                                     animate={{ opacity: 1, x: 0 }}
                                                     transition={{ delay: 0.1 + index * 0.1 }}
                                                 >
-                                                    <div className="flex-shrink-0 h-5 w-5 text-[#F1B434] mr-2">
+                                                    <div className="flex-shrink-0 h-5 w-5 text-amber-500 mr-2">
                                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                                             <path
                                                                 fillRule="evenodd"
@@ -1084,7 +1120,7 @@ const PageContent = () => {
                                         </ul>
                                     </div>
                                     <div className="h-full rounded-lg overflow-hidden shadow-lg">
-                                        <img src={contentData.overview.image} alt="TIL Overview" className="w-full h-full object-cover" />
+                                        <img src={contentData.overview.image} alt="TIL Overview" className="w-full h-full object-cover" loading="lazy" />
                                     </div>
                                 </div>
                             )}
@@ -1094,8 +1130,11 @@ const PageContent = () => {
                                     <h2 className="text-2xl font-bold text-gray-800 mb-4">{contentData.history.title}</h2>
                                     <p className="text-gray-600 mb-6">{contentData.history.description}</p>
 
-                                    {/* Roulette-style History Carousel */}
-                                    <HistoryRoulette milestones={contentData.history.milestones} autoPlayInterval={3000} />
+                                    {/* Group milestones by decade */}
+                                    {(() => {
+                                        const groupedMilestones = groupByDecade(contentData.history.milestones);
+                                        return <HistoryRoulette decades={groupedMilestones} autoPlayInterval={3000} />;
+                                    })()}
                                 </div>
                             )}
 
@@ -1108,14 +1147,14 @@ const PageContent = () => {
                                         {contentData.values.values.map((value, index) => (
                                             <motion.div
                                                 key={index}
-                                                className="bg-gray-50 p-6 rounded-lg"
+                                                className="bg-gray-50 p-6 rounded-lg border-l-4 border-amber-500"
                                                 initial={{ opacity: 0, y: 20 }}
                                                 animate={{ opacity: 1, y: 0 }}
                                                 transition={{ delay: 0.1 + index * 0.1 }}
                                                 whileHover={{ y: -5 }}
                                             >
                                                 <div className="flex items-start gap-4">
-                                                    <div className="p-2 bg-[#F1B434]/10 rounded-lg">{value.icon}</div>
+                                                    <div className="p-2 bg-amber-100 rounded-lg">{value.icon}</div>
                                                     <div>
                                                         <h3 className="text-lg font-bold text-gray-800 mb-2">{value.title}</h3>
                                                         <p className="text-gray-600">{value.description}</p>
@@ -1125,7 +1164,7 @@ const PageContent = () => {
                                         ))}
                                     </div>
                                 </div>
-                            )}     
+                            )}
 
                             {activeTab === 'leadership' && (
                                 <div>
@@ -1139,7 +1178,7 @@ const PageContent = () => {
                                                 image: `${basePath}/pinaki.jpg`,
                                                 description: 'Leading TIL with strategic vision and extensive industry experience.'
                                             },
-                                              {
+                                            {
                                                 name: 'Rishabh P Nair',
                                                 title: 'Head Of Brand, Content & PR',
                                                 image: `${basePath}/Risabh.png`,
@@ -1175,7 +1214,7 @@ const PageContent = () => {
                                                 image: `${basePath}/saiket.png`,
                                                 description: 'Optimizing supply chain operations and commercial excellence.'
                                             }
-                                          
+
                                         ].map((member, index) => (
                                             <motion.div
                                                 key={index}
@@ -1183,6 +1222,7 @@ const PageContent = () => {
                                                 initial={{ opacity: 0, y: 20 }}
                                                 animate={{ opacity: 1, y: 0 }}
                                                 transition={{ delay: 0.1 + index * 0.1 }}
+                                                whileHover={{ y: -5 }}
                                             >
                                                 <div className="flex h-full">
                                                     {/* Image Section */}
@@ -1191,20 +1231,21 @@ const PageContent = () => {
                                                             <img
                                                                 src={member.image}
                                                                 alt={member.name}
-                                                                className="w-28 h-28 object-cover rounded-full border-4 border-[#F1B434] shadow-md z-10 relative transition-transform duration-300 group-hover:scale-110"
+                                                                className="w-28 h-28 object-cover rounded-full border-4 border-amber-500 shadow-md z-10 relative transition-transform duration-300 group-hover:scale-110"
+                                                                loading="lazy"
                                                             />
                                                         </div>
-                                                        <div className="absolute inset-0 bg-gradient-to-r from-[#F1B434]/20 to-transparent"></div>
+                                                        <div className="absolute inset-0 bg-gradient-to-r from-amber-400/20 to-transparent"></div>
                                                     </div>
 
                                                     {/* Content Section */}
                                                     <div className="flex-1 p-4 flex flex-col justify-center">
-                                                        <h3 className="font-bold text-gray-800 text-lg group-hover:text-[#F1B434] transition-colors duration-300">{member.name}</h3>
-                                                        <p className="text-sm text-[#F1B434] font-medium">{member.title}</p>
+                                                        <h3 className="font-bold text-gray-800 text-lg group-hover:text-amber-500 transition-colors duration-300">{member.name}</h3>
+                                                        <p className="text-sm text-amber-500 font-medium">{member.title}</p>
                                                     </div>
 
                                                     {/* Hover description that appears on the side */}
-                                                    <div className="absolute top-0 left-40 right-0 h-full bg-gradient-to-r from-[#F1B434] to-[#FFE352] text-white p-4 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-center shadow-lg rounded-r-xl">
+                                                    <div className="absolute top-0 left-40 right-0 h-full bg-gradient-to-r from-amber-400 to-yellow-300 text-white p-4 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-center shadow-lg rounded-r-xl">
                                                         <h3 className="font-bold text-lg mb-1">{member.name}</h3>
                                                         <p className="text-sm font-medium mb-2">{member.title}</p>
                                                         <p className="text-xs leading-tight">
@@ -1218,7 +1259,6 @@ const PageContent = () => {
                                 </div>
                             )}
 
-
                             {activeTab === 'awards' && (
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                                     <div>
@@ -1228,13 +1268,13 @@ const PageContent = () => {
                                             {contentData.awards.awards.map((award, index) => (
                                                 <motion.div
                                                     key={index}
-                                                    className="bg-gray-50 p-4 rounded-lg border-l-4 border-[#F1B434]"
+                                                    className="bg-gray-50 p-4 rounded-lg border-l-4 border-amber-500"
                                                     initial={{ opacity: 0, x: 10 }}
                                                     animate={{ opacity: 1, x: 0 }}
                                                     transition={{ delay: 0.1 + index * 0.1 }}
                                                 >
                                                     <div className="flex items-start gap-3">
-                                                        <div className="bg-[#F1B434] text-white text-sm font-bold px-3 py-1 rounded">
+                                                        <div className="bg-amber-500 text-white text-sm font-bold px-3 py-1 rounded">
                                                             {award.year}
                                                         </div>
                                                         <div>
@@ -1247,7 +1287,7 @@ const PageContent = () => {
                                         </div>
                                     </div>
                                     <div className="h-full rounded-lg overflow-hidden shadow-lg">
-                                        <img src={contentData.awards.image} alt="TIL Awards" className="w-full h-full object-cover" />
+                                        <img src={contentData.awards.image} alt="TIL Awards" className="w-full h-full object-cover" loading="lazy" />
                                     </div>
                                 </div>
                             )}
@@ -1266,10 +1306,10 @@ const PageContent = () => {
                                                     animate={{ opacity: 1, y: 0 }}
                                                     transition={{ delay: 0.1 + index * 0.1 }}
                                                 >
-                                                    <h3 className="font-bold text-[#F1B434] mb-2">{region.region}</h3>
+                                                    <h3 className="font-bold text-amber-500 mb-2">{region.region}</h3>
                                                     <div className="flex flex-wrap gap-2">
                                                         {region.countries.map((country, i) => (
-                                                            <span key={i} className="text-sm bg-gray-50 px-3 py-1 rounded-full">
+                                                            <span key={i} className="text-sm bg-amber-100 text-amber-800 px-3 py-1 rounded-full">
                                                                 {country}
                                                             </span>
                                                         ))}
@@ -1279,7 +1319,7 @@ const PageContent = () => {
                                         </div>
                                     </div>
                                     <div className="h-full rounded-lg overflow-hidden shadow-lg">
-                                        <img src={contentData.global.image} alt="TIL Global Presence" className="w-full h-full object-cover" />
+                                        <img src={contentData.global.image} alt="TIL Global Presence" className="w-full h-full object-cover" loading="lazy" />
                                     </div>
                                 </div>
                             )}
@@ -1291,7 +1331,7 @@ const PageContent = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.6, delay: 1 }}
-                        className="bg-gradient-to-r from-[#F1B434] to-[#FFE352] rounded-xl shadow-lg p-8 text-white"
+                        className="bg-gradient-to-r from-amber-400 to-yellow-300 rounded-xl shadow-lg p-8 text-white"
                     >
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                             <div className="p-4">
@@ -1327,13 +1367,21 @@ const PageContent = () => {
                             </p>
                             <div className="flex flex-col sm:flex-row gap-3 justify-center">
                                 <Link href={`${basePath}/contact-us`} passHref>
-                                    <button className="px-6 py-3 bg-[#F1B434] text-white font-medium rounded-lg hover:bg-[#d89c2a] transition-colors shadow-md">
+                                    <motion.button
+                                        className="px-6 py-3 bg-amber-500 text-white font-medium rounded-lg hover:bg-amber-600 transition-colors shadow-md"
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
+                                    >
                                         Contact Us
-                                    </button>
+                                    </motion.button>
                                 </Link>
-                                <button className="px-6 py-3 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm">
+                                <motion.button
+                                    className="px-6 py-3 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
                                     Download Company Profile
-                                </button>
+                                </motion.button>
                             </div>
                         </div>
                     </motion.div>
@@ -1345,7 +1393,11 @@ const PageContent = () => {
 
 export default function Page() {
     return (
-        <Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
+        <Suspense fallback={
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-500"></div>
+            </div>
+        }>
             <PageContent />
         </Suspense>
     );
