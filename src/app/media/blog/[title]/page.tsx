@@ -594,7 +594,7 @@ const BlogViewPage: React.FC = () => {
           <h2 className="text-2xl font-bold text-gray-800">Post not found</h2>
           <p className="text-gray-600 mt-2">The article you're looking for doesn't exist.</p>
           <button
-            onClick={() => router.push(`${basePath}/media/blog`)}
+            onClick={() => router.push(`/media/blog`)}
             className="mt-8 px-4 py-2 bg-[#F1B434] text-white rounded-md hover:bg-[#d89c2a] transition-colors"
           >
             Back to Blog
@@ -619,7 +619,7 @@ const BlogViewPage: React.FC = () => {
         <div className="absolute inset-0 z-20 flex items-center pt-6">
           <div className="max-w-6xl mx-auto px-6 md:px-10 w-full">
             <button
-              onClick={() => router.push(`${basePath}/media/blog`)}
+              onClick={() => router.push(`/media/blog`)}
               className="flex items-center text-white/80 hover:text-white mb-4 transition-colors"
             >
               <ArrowLeft size={16} className="mr-2" />
@@ -882,7 +882,7 @@ const BlogViewPage: React.FC = () => {
                       key={relatedPost.id}
                       className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
                       whileHover={{ y: -5 }}
-                      onClick={() => router.push(`${basePath}/media/blog/${encodeURIComponent(relatedPost.title.replace(/\s+/g, '-').toLowerCase())}`)}
+                      onClick={() => router.push(`media/blog/${encodeURIComponent(relatedPost.title.replace(/\s+/g, '-').toLowerCase())}`)}
                     >
                       <div className="h-40 overflow-hidden">
                         <img
@@ -939,7 +939,7 @@ const BlogViewPage: React.FC = () => {
                   <div 
                     key={post.id} 
                     className="flex gap-3 cursor-pointer group"
-                    onClick={() => router.push(`${basePath}/media/blog/${encodeURIComponent(post.title.replace(/\s+/g, '-').toLowerCase())}`)}
+                    onClick={() => router.push(`/media/blog/${encodeURIComponent(post.title.replace(/\s+/g, '-').toLowerCase())}`)}
                   >
                     <div className="flex-shrink-0">
                       <img
@@ -973,7 +973,7 @@ const BlogViewPage: React.FC = () => {
                   <div 
                     key={post.id}
                     className="cursor-pointer group"
-                    onClick={() => router.push(`${basePath}/media/blog/${encodeURIComponent(post.title.replace(/\s+/g, '-').toLowerCase())}`)}
+                    onClick={() => router.push(`/media/blog/${encodeURIComponent(post.title.replace(/\s+/g, '-').toLowerCase())}`)}
                   >
                     <h4 className="font-medium text-gray-800 text-sm group-hover:text-[#F1B434] transition-colors line-clamp-2">
                       {post.title}

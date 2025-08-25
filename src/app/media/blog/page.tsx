@@ -145,7 +145,7 @@ const Page: React.FC = () => {
 
   const handlePostClick = (postTitle: string) => {
     const slug = postTitle.replace(/\s+/g, "-").toLowerCase();
-    navigate.push(`${basePath}/media/blog/${slug}`);
+    navigate.push(`/media/blog/${slug}`);
   };
 
 
