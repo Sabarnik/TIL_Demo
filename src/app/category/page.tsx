@@ -547,7 +547,7 @@ const Page: React.FC = () => {
                       >
                         <button className="px-6 py-3 bg-[#F1B434] text-white font-medium rounded-lg hover:bg-[#d89c2a] transition-colors shadow-md">
                           <Link
-                            href={`${basePath}/category/${categoryProducts[activeCategory as keyof typeof categoryProducts][currentSlide].id
+                            href={`/category/${categoryProducts[activeCategory as keyof typeof categoryProducts][currentSlide].id
                               }`}
                           >
                             View Details
