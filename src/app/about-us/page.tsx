@@ -427,9 +427,9 @@ const PageContent = () => {
                     image: `${basePath}/awards.jpg`
                 },
                 {
-                    name: 'Global Presence',
+                    name: 'Our Presence',
                     description: 'Our international footprint and partnerships',
-                    image: `${basePath}/global-presence.jpg`
+                    image: `${basePath}/our-presence.jpg`
                 },
                 {
                     name: 'Manufacturing Facilities',
@@ -890,7 +890,7 @@ const PageContent = () => {
                     countries: ['Brazil', 'Chile', 'Peru']
                 }
             ],
-            image: `${basePath}/about-global.jpg`
+            image: `${basePath}/our-presence.jpg`
         }
     };
 

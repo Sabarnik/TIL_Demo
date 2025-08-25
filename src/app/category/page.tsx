@@ -421,10 +421,10 @@ const Page: React.FC = () => {
               <motion.div
                 className="absolute inset-0 -z-10 rounded-xl"
                 initial={{ 
-                  background: `radial-gradient(circle at 50% 50%, rgba(241, 180, 52, 0.1) 0%, transparent 0%)`
+                  background: `radial-gradient(circle at 50% 50%, rgba(247, 184, 49, 0.1) 0%, transparent 0%)`
                 }}
                 animate={{ 
-                  background: `radial-gradient(circle at 50% 50%, rgba(241, 180, 52, 0.1) 50%, transparent 70%)`
+                  background: `radial-gradient(circle at 50% 50%, rgba(248, 184, 46, 0.1) 50%, transparent 70%)`
                 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
               />
