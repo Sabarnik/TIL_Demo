@@ -102,8 +102,7 @@ const HistoryRoulette: React.FC<{ decades: DecadeGroup[]; autoPlayInterval?: num
                                     }`}
                                 style={{ transform: `translate(${x}px, ${y}px)` }}
                                 aria-label={`View events from ${d.decade}`}
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.95 }}
+                                
                             >
                                 <span className={`${isActive ? 'text-xs' : 'text-[10px]'} font-medium`}>
                                     {d.decade}
@@ -177,7 +176,7 @@ const HistoryRoulette: React.FC<{ decades: DecadeGroup[]; autoPlayInterval?: num
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >
-                                Random Decade
+                                Milestones
                             </motion.button>
                         </div>
                     </div>
@@ -328,6 +327,11 @@ const HistoryCarousel: React.FC<{
                                 </motion.button>
                             </div>
                         </div>
+                        <div className="flex items-center gap-3 mb-2">
+                            <div className="bg-amber-500 text-white text-sm font-bold px-2 py-1 rounded">
+                                {current.year}
+                            </div>
+                        </div>
 
                         <div className="relative h-32 md:h-40 overflow-hidden">
                             <AnimatePresence mode="wait">
@@ -339,11 +343,6 @@ const HistoryCarousel: React.FC<{
                                     transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                                     className="absolute inset-0 flex flex-col justify-center"
                                 >
-                                    <div className="flex items-center gap-3 mb-2">
-                                        <div className="bg-amber-500 text-white text-sm font-bold px-2 py-1 rounded">
-                                            {current.year}
-                                        </div>
-                                    </div>
                                     <p className="text-gray-700 text-lg leading-relaxed line-clamp-4">
                                         {current.event}
                                     </p>
@@ -409,7 +408,7 @@ const PageContent = () => {
         router.push(`${pathname}?tab=${tabId}`);
     };
 
-    const submenuData = {  
+    const submenuData = {
         company: {
             items: [
                 {
@@ -984,7 +983,10 @@ const PageContent = () => {
                                         key={tab.id}
                                         className="relative"
                                         onMouseEnter={() => setHoveredTab(tab.id)}
-                                        onMouseLeave={() => setHoveredTab(null)}
+                                        onMouseLeave={() => {
+                                            if (tab.id !== activeTab) setHoveredTab(null);
+                                        }}
+
                                     >
                                         <motion.button
                                             onClick={() => handleTabChange(tab.id)}
@@ -1007,7 +1009,8 @@ const PageContent = () => {
                                         </motion.button>
 
                                         {/* Submenu Dropdown */}
-                                        {hoveredTab === tab.id && (
+                                        {(hoveredTab === tab.id || activeTab === tab.id) && (
+
                                             <motion.div
                                                 initial={{ opacity: 0, y: 10 }}
                                                 animate={{ opacity: 1, y: 0 }}
