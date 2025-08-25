@@ -10,12 +10,13 @@ import {
   Building2,
   User
 } from 'lucide-react';
+import { useRouter } from "next/navigation";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 const Page = () => {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
-
+  const router = useRouter();
   const sidebarData = [
     {
       id: 'governance',
@@ -67,7 +68,7 @@ const Page = () => {
         {/* Content Container */}
         <div className="absolute inset-0 z-20 flex items-center pt-6">
           <div className="max-w-7xl mx-auto px-6 md:px-10 xl:px-20 w-full">
-            <motion.div 
+            <motion.div
               className="max-w-2xl"
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
@@ -81,7 +82,7 @@ const Page = () => {
               >
                 INVESTOR RELATIONS
               </motion.span>
-              
+
               <motion.h1
                 className="text-4xl md:text-5xl lg:text-[2.75rem] font-bold text-white mb-4 leading-tight"
                 initial={{ opacity: 0, y: 20 }}
@@ -90,14 +91,14 @@ const Page = () => {
               >
                 TIL <span className="text-[#F1B434]">Investors</span>
               </motion.h1>
-              
+
               <motion.div
                 className="w-24 h-1.5 bg-gradient-to-r from-[#F1B434] to-[#FFE352] rounded-full mb-4"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ delay: 0.4, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               />
-              
+
               <motion.p
                 className="text-lg text-gray-200 max-w-xl leading-relaxed"
                 initial={{ opacity: 0 }}
@@ -132,16 +133,14 @@ const Page = () => {
                   <div key={item.id} className="relative">
                     <button
                       onClick={() => handleMenuToggle(item.id)}
-                      className={`flex items-center text-white font-medium hover:underline focus:outline-none ${
-                        activeMenu === item.id ? 'underline' : ''
-                      }`}
+                      className={`flex items-center text-white font-medium hover:underline focus:outline-none ${activeMenu === item.id ? 'underline' : ''
+                        }`}
                     >
                       {item.title}
                       <ChevronDown
                         size={16}
-                        className={`ml-1 transition-transform ${
-                          activeMenu === item.id ? 'rotate-180' : ''
-                        }`}
+                        className={`ml-1 transition-transform ${activeMenu === item.id ? 'rotate-180' : ''
+                          }`}
                       />
                     </button>
                   </div>
@@ -190,7 +189,7 @@ const Page = () => {
           </motion.div>
 
           {/* Rest of Content Grid */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 1 }}
@@ -296,13 +295,14 @@ const Page = () => {
           </motion.div>
 
           {/* Enquiry Button */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 1.2 }}
             className="text-right"
           >
             <motion.button
+              onClick={() => router.push("/contact-us/inquiry")}
               className="inline-flex items-center px-6 py-3 bg-[#F1B434] text-white rounded-lg font-medium shadow-md hover:shadow-lg transition-all hover:bg-[#E8AC30]"
               whileHover={{ scale: 1.03, y: -2 }}
               whileTap={{ scale: 0.98 }}

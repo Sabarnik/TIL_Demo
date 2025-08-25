@@ -118,7 +118,7 @@ const Hero: React.FC = () => {
               >
                 {/* Explore Products */}
                 <motion.button
-                  onClick={() => router.push(`${basePath}/category`)}
+                  onClick={() => router.push(`/category`)}
                   whileHover={{
                     scale: 1.05,
                     boxShadow: "0 0 40px rgba(241, 180, 52, 0.8)",

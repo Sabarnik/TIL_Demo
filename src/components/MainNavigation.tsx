@@ -3527,7 +3527,7 @@ const MainNavigation: React.FC = () => {
     >
       <motion.button
         onClick={() => {
-          router.push(`${basePath}${item.path}`); // navigate with basePath
+          router.push(`${item.path}`); // navigate with basePath
           setActiveMenu(null); // close hover menu
         }}
         className={`flex items-center justify-center space-x-1 px-4 font-bold text-sm uppercase tracking-wide transition-all duration-200 w-full h-full ${

@@ -141,7 +141,7 @@ const ProductCard: FC<{ machine: Machine; isActive: boolean }> = ({
       </motion.span>
 
       {/* Always visible Explore Now button */}
-      <Link href={`${basePath}/category`} passHref>
+      <Link href={`/category`} passHref>
       <motion.button
         className={`absolute flex items-center justify-center gap-1 text-white px-3 py-1.5 rounded-lg text-xs z-10 ${
           isHovered ? 'bottom-4 right-4' : 'bottom-4 left-1/2 -translate-x-1/2'

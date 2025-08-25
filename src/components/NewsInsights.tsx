@@ -266,7 +266,7 @@ const news = [
           viewport={{ once: true }}
         >
           <Link
-      href={`${basePath}/media/news`}
+      href={`/media/news`}
       className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-[#F1B434] to-[#FFE352] text-white rounded-lg font-semibold shadow-md hover:shadow-lg transition-all"
     >
       View All News Articles

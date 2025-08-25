@@ -381,7 +381,7 @@ const Page: React.FC = () => {
                     </h3>
                     <p className="text-sm text-gray-600 mb-4">{product.description}</p>
                     <div className="flex items-center text-sm text-[#F1B434] font-medium">
-                      <Link href={`${basePath}/category/${product.id}`}>
+                      <Link href="/category/${product.id}">
                         <span>Explore Product</span>
                         <ChevronRight className="w-4 h-4 ml-1" />
                       </Link>

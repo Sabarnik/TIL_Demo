@@ -38,7 +38,7 @@ const TopBar: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6 md:px-10 xl:px-20 h-full">
           <div className="flex items-center justify-between h-full">
             {/* Logo */}
-            <Link href={basePath || '/'} className="flex items-center">
+            <Link href={'/'} className="flex items-center">
               <motion.img
                 src={`${basePath}/logo1.png`}
                 alt="Logo"

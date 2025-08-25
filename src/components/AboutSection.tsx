@@ -58,7 +58,7 @@ const AboutSection: React.FC = () => {
               </p>
 
               <Link
-                href={`${basePath}/about-us`}
+                href={`/about-us`}
                 className="inline-flex items-center text-lg font-semibold mb-8 group"
                 style={{ fontFamily: "Arial, sans-serif" }}
               >

@@ -1369,7 +1369,7 @@ const PageContent = () => {
                                 Our team is ready to answer any questions you may have about our company, products, or services.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                                <Link href={`${basePath}/contact-us`} passHref>
+                                <Link href={`/contact-us`} passHref>
                                     <motion.button
                                         className="px-6 py-3 bg-amber-500 text-white font-medium rounded-lg hover:bg-amber-600 transition-colors shadow-md"
                                         whileHover={{ scale: 1.05 }}
