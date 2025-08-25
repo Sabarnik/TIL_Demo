@@ -143,15 +143,6 @@ const BrochureDownloadModal: React.FC<BrochureDownloadModalProps> = ({ isOpen, o
                         Fill out the form below to receive our product brochure
                       </p>
                     </div>
-                    {isMobile && (
-                      <div className="w-16">
-                        <img 
-                          src={`${basePath}/til-logo.png`} 
-                          alt="TIL Logo"
-                          className="w-full"
-                        />
-                      </div>
-                    )}
                   </div>
                   <div className="h-1 w-12 mb-4 md:mb-6" style={{ backgroundColor: '#F1B434' }}></div>
                 </motion.div>

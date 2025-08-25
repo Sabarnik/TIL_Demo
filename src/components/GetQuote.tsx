@@ -143,15 +143,6 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
                         Fill out the form below and our team will contact you shortly
                       </p>
                     </div>
-                    {isMobile && (
-                      <div className="w-12">
-                        <img 
-                          src={`${basePath}/til-logo.png`} 
-                          alt="TIL Logo"
-                          className="w-full"
-                        />
-                      </div>
-                    )}
                   </div>
                   <div className="h-1 w-12 mb-3" style={{ backgroundColor: '#F1B434' }}></div>
                 </motion.div>
